@@ -1,0 +1,64 @@
+ChangeLog of simple C/C++ library "clib"
+ + added
+ - removed
+ * changed
+
+2015.01.22
+ * back files from old backup and download to github with old bugs
+
+2010.06.20
+ * str_t: str_to_bool("0") = false, str_to_bool(123) = true
+
+2010.05.22
+ * ini_t: return default value (float/double/int/bool) if string is empty
+
+2008.08.02
+ + add str_init_vsprintf(), str_vsprintf(), str_init_sprintf(), str_sprintf()
+ - remove using snprintf() in str.h/str.c
+ + add str_get_size() like str_size()
+ + add str_ptr() like str_data()
+ * fix BUG in str_delete()
+
+2008.04.07
+ + add aini.h (C++ binding for ini_t)
+
+2008.03.22
+ * fix bug near "static" & "inline" again in str.h
+ + add ini_set_state() то ini.h
+ - delete unused line in ini_decode_str()...
+
+2008.03.06
+ + add <stdbool.h> support in `str_t`
+
+2008.02.07
+ + add ini_has_section() and ini_has_ident() methods in `ini_t`
+
+2008.02.06
+ * fix bug with end of file whithout CR
+
+2007.11.07
+ + add str_hex2bin()/str_bin2hex() in `str_t`
+ + add ini_read_bin()/ini_write_bin() in `ini_t`
+
+2007.11.04
+ + add STR_INLINE and INI_INLINE macro
+
+2007.11.04
+ * rename `inifile_t` to `ini_t`, inifile.c to ini.c and inifile.h to ini.h
+ + add str_to_int64 in `str_t`
+ + str_init_int64_hex() and str_int64_hex()
+ + add support int64 in `ini_t`
+
+2007.11.03
+ * modify bool support in `str_t`
+ + add str_init_size_cstr() function
+ + first test `inifile_t` with read/write
+ + add code/decode string in inifile_write_str() and inifile_read_str()
+
+2007.11.01
+ + work with inifile.c/inifile.h + tests...
+ * fix memory bug in str_to_long_ex() and...
+
+2007.02.20
+ + begin project (`str_t` and `inifile_t` C class)
+
