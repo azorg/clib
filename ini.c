@@ -2,9 +2,8 @@
  * Project: 'ini_t'
  * Version: 0.1b
  * File: "ini.c"
- * (C) 2007 Alex Grinkov <a.grinkov@gmail.com>
+ * (C) 2007-2015 Alex Zorg <azorg@mail.ru>
  * Licensed by GNU General Public License version 2
- * Last update: 2010.05.22
  */
 
 //---------------------------------------------------------------------------

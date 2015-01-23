@@ -2,9 +2,8 @@
  * Project: class "aini" (C++ binding for "ini_t")
  * Version: 0.1a
  * File: "aini.h"
- * (C) 2007 Alex Grinkov <a.grinkov@gmail.com>
+ * (C) 2007-2015 Alex Zorg <azorg@mail.ru>
  * Licensed by GNU General Public License version 2
- * Last update: 2008.04.07
  */
 
 #ifndef AINI_H

@@ -2,10 +2,8 @@
  * Project: C string type
  * Version: 0.1b
  * File: "str.c"
- * (C) 2007-2010 Alex Grinkov <a.grinkov@gmail.com>,
- *               Anton Shmigirilov <shmigirilov@gmail.com>
+ * (C) 2007-2014 Alex Zorg <azorg@mail.ru>
  * Licensed by GNU General Public License version 2
- * Last update: 2010.06.20
  */
 
 //---------------------------------------------------------------------------
@@ -113,7 +111,11 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
   // try vsnprintf()
   while (1)
   {
-    str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap);
+		va_list ap_copy;
+		va_copy(ap_copy, ap);
+    str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap_copy);
+		va_end(ap_copy);
+
     if (str_size < buf.size)
       break; // vsnprintf() return OK
     str_set_size(&buf, buf.size + str_def_sector); // increment buf size

@@ -2,10 +2,8 @@
  * Project: C string type
  * Version: 0.1b
  * File: "str.h"
- * (C) 2007,2008 Alex Grinkov <a.grinkov@gmail.com>,
- *               Anton Shmigirilov <shmigirilov@gmail.com>
+ * (C) 2007-2015 Alex Zorg <azorg@mail.ru>
  * Licensed by GNU General Public License version 2
- * Last update: 2008.08.02
  */
 
 #ifndef STR_H
@@ -476,10 +474,10 @@ STR_INLINE str_t str_long2str(long value){ return str_long(value); }
 STR_INLINE str_t str_int2str(int value){ return str_int(value); }
 //---------------------------------------------------------------------------
 #ifdef STR_EXTRA
-// convert binary array to hex string (alya "01:23:AB:CD")
+// convert binary array to hex string (like "01:23:AB:CD")
 str_t str_bin2hex(const char *bin, int size);
 //---------------------------------------------------------------------------
-// convert hex string (alya "01:23:AB:CD") to binary array
+// convert hex string (like "01:23:AB:CD") to binary array
 str_t str_hex2bin(const char *str);
 #endif // STR_EXTRA
 //---------------------------------------------------------------------------
