@@ -2,10 +2,9 @@
  * Project: C string type
  * Version: 0.1b
  * File: "str.h"
- * (C) 2007,2008 Alex Grinkov <a.grinkov@gmail.com>,
- *               Anton Shmigirilov <shmigirilov@gmail.com>
+ * (C) 2007..2015 Alex Zorg         <azorg@mail.com>,
+ *                Anton Shmigirilov <shmigirilov@gmail.com>
  * Licensed by GNU General Public License version 2
- * Last update: 2008.08.02
  */
 
 #ifndef STR_H
@@ -27,6 +26,7 @@
 //---------------------------------------------------------------------------
 // debug output
 //#define STR_DEBUG
+//#define STR_DEBUG_EXTRA
 
 // if type 'int64' exist
 #define STR_INT64 long long
@@ -112,8 +112,8 @@ extern int str_def_sector; // default sector size
 extern char str_loc_al[]; // local alphabet low case
 extern char str_loc_au[]; // local alphabet upper case
 #ifdef STR_DEBUG
-extern unsigned str_malloc_num; 
-extern unsigned str_malloc_bytes; 
+extern unsigned str_malloc_num;
+extern unsigned str_malloc_bytes;
 #endif // STR_DEBUG
 //---------------------------------------------------------------------------
 #ifdef __cplusplus
@@ -128,7 +128,7 @@ STR_INLINE void* str_malloc_mem(int size)
   if (ptr != (void*) NULL)
   {
 #ifdef STR_DEBUG
-    str_malloc_num++; 
+    str_malloc_num++;
 #endif // STR_DEBUG
   }
 #ifdef STR_EXCEPTION_STRING
@@ -141,10 +141,17 @@ STR_INLINE void* str_malloc_mem(int size)
 STR_INLINE char* str_malloc(int size)
 {
   char *ptr = (char*) str_malloc_mem(size); // allocate memory
+
 #ifdef STR_DEBUG
   if (ptr != (char*) NULL)
     str_malloc_bytes += size;
 #endif // STR_DEBUG
+
+#ifdef STR_DEBUG_EXTRA
+  if (ptr != (char*) NULL)
+    fprintf(stderr, "str.c: str_malloc_mem(%i)\n", size);
+#endif // STR_DEBUG_EXTRA
+
   return ptr;
 }
 //---------------------------------------------------------------------------
@@ -164,11 +171,20 @@ STR_INLINE void str_free(str_t *s)
 {
   if (s->size != 0)
   {
-#ifdef STR_DEBUG
+#if defined(STR_DEBUG) || defined (STR_DEBUG_EXTRA)
     int blk = (s->size + s->sector) / s->sector;
+#endif
+
+#ifdef STR_DEBUG
     str_malloc_bytes -= s->sector * blk;
 #endif // STR_DEBUG
+
     str_free_mem((void*) s->ptr);
+
+#ifdef STR_DEBUG_EXTRA
+    if (s->ptr != (char*) NULL)
+      fprintf(stderr, "str.c: str_free_mem(%i)\n", s->sector * blk);
+#endif // STR_DEBUG_EXTRA
   }
 }
 //---------------------------------------------------------------------------

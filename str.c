@@ -2,10 +2,9 @@
  * Project: C string type
  * Version: 0.1b
  * File: "str.c"
- * (C) 2007-2010 Alex Grinkov <a.grinkov@gmail.com>,
+ * (C) 2007-2015 Alex Zorg         <azorg@mail.ru>,
  *               Anton Shmigirilov <shmigirilov@gmail.com>
  * Licensed by GNU General Public License version 2
- * Last update: 2010.06.20
  */
 
 //---------------------------------------------------------------------------
@@ -21,7 +20,7 @@ char str_loc_au[] = STR_LOCAL_AU; // local alphabet upper case
 //---------------------------------------------------------------------------
 #ifdef STR_DEBUG
 unsigned str_malloc_num = 0;
-unsigned str_malloc_bytes = 0; 
+unsigned str_malloc_bytes = 0;
 #endif // STR_DEBUG
 //---------------------------------------------------------------------------
 void str_create_size(str_t *s, int size) // size > 0
@@ -103,19 +102,29 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
 {
   str_t buf; // temp buffer for vsnprintf()
   int str_size;
-  
+
   // prepare buffer
   buf.sector = str_def_sector;
   buf.size = str_def_sector - 1;
   if (buf.size < 1) buf.size = 1;
   str_create_size(&buf, buf.size);
-  
+
   // try vsnprintf()
   while (1)
   {
     str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap);
+    fprintf(stderr, ">>>1: %i - %s\n", str_size, buf.ptr);
+    str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap);
+    fprintf(stderr, ">>>2: %i - %s\n", str_size, buf.ptr);
+
+#ifdef STR_DEBUG_EXTRA
+    fprintf(stderr, ">>> str_init_vsprintf(): str_size=%i buf.size=%i\n",
+                    str_size, buf.size);
+#endif // STR_DEBUG_EXTRA
+
     if (str_size < buf.size)
       break; // vsnprintf() return OK
+
     str_set_size(&buf, buf.size + str_def_sector); // increment buf size
   }
 
@@ -123,7 +132,7 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
   s->sector = str_def_sector;
   str_create_size(s, str_size);
   memcpy((void*) s->ptr, (const void*) buf.ptr, str_size + 1);
-  
+
   // free buffer
   str_free(&buf);
 }
@@ -252,9 +261,9 @@ long str_to_long_cstyle(const str_t *s, long def_val, unsigned char base)
     }
     p++;
     base = 8; // OCT (ANSI C)
-    if (*p == 'x' || *p == 'X') 
+    if (*p == 'x' || *p == 'X')
     { // HEX
-      base = 16; 
+      base = 16;
       i--; p++;
     }
     else if (*p == 'b' || *p == 'B')
@@ -361,10 +370,10 @@ STR_BOOL str_to_bool(const str_t *s)
 {
   if (str_is_equal_cstr(s, STR_BOOL_TRUE_STR))
     return STR_BOOL_TRUE;
- 
+
   if (str_is_equal_cstr(s, STR_BOOL_FALSE_STR))
     return STR_BOOL_FALSE;
- 
+
   if (str_to_long(s) != 0)
     return STR_BOOL_TRUE;
 
@@ -510,7 +519,7 @@ str_t str_sum(const char *fmt, ...)
   struct str_sum_list *lst = buf;
   str_t s; // return value
   str_init_zero(&s);
-  
+
   // check argument
   if (fmt == (char*) NULL) return s;
   num = strlen(fmt);
@@ -561,7 +570,7 @@ str_t str_sum(const char *fmt, ...)
     sum_size += lst[i].p->size;
   }
   va_end(ap);
-  
+
   // copy to output buffer
   if (sum_size != 0)
   {
@@ -659,7 +668,7 @@ int str_find_last(const str_t *s, const str_t *substr)
     j = i;
     i += substr->size;
   }
-  return j; 
+  return j;
 }
 //---------------------------------------------------------------------------
 int str_find_one_of(
@@ -967,7 +976,7 @@ void str_set_sector(str_t *s, int new_sector)
     {
       char *new_ptr = str_malloc(b_new);
       memcpy(new_ptr, s->ptr, s->size + 1);
-      str_free(s); 
+      str_free(s);
       s->ptr = new_ptr;
     }
   }
@@ -1025,7 +1034,7 @@ str_t str_bin2hex(const char *bin, int size)
     char *dst;
     str_init_size_cstr(&out, size * 3 - 1, (const char*) NULL);
     dst = out.ptr;
-  
+
     while (size-- != 0)
     {
       unsigned char val = (unsigned char) *bin++;
@@ -1051,15 +1060,15 @@ str_t str_hex2bin(const char *str)
 
   if (str == (const char *) NULL)
     goto return_empty_string;
-  
+
   size = strlen(str) + 1;
   if ((size % 3) != 0)
     goto return_empty_string;
-  
+
   size /= 3;
   if (size == 0)
     goto return_empty_string;
-  
+
   str_init_size_cstr(&out, size, (const char*) NULL);
   dst = out.ptr;
 
