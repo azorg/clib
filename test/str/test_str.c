@@ -89,16 +89,17 @@ int main()
     str_t s2 = str_cstr("xyz");
     
     str_insert(&s1, &s2, 3);
+    printf("str_insert()");
+    print_ok(str_is_equal_cstr(&s1, "123xyz456789"));
+    
     str_insert_char(&s1, '_', 1);
-    printf("s1 = '%s' (str_insert)", str_c(&s1));
+    printf("str_insert_char() s1 = '%s'", str_c(&s1));
     print_ok(str_is_equal_cstr(&s1, "1_23xyz456789"));
     
     str_delete(&s1, 1, 1);
     str_delete(&s1, 3, 3);
     str_delete(&s1, 6, -1);
-    printf("s1 = '%s' (str_delete)", str_c(&s1));
-    //print_ok(str_is_equal_cstr(&s1, "123xyz456789"));
-    //print_ok(str_is_equal_cstr(&s1, "123456789"));
+    printf("str_delete() s1 = '%s'", str_c(&s1));
     print_ok(str_is_equal_cstr(&s1, "123456"));
     
     str_free(&s1);

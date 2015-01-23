@@ -9,7 +9,7 @@ OUT_DIR      := .
 # 2-nd way to select source files
 SRCS := ../../str.c \
         ../../ini.c \
-	test_ini.c
+        test_ini.c
 
 DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3"
 #-DINI_INLINE="static inline"

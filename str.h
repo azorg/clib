@@ -2,8 +2,8 @@
  * Project: C string type
  * Version: 0.1b
  * File: "str.h"
- * (C) 2007..2015 Alex Zorg         <azorg@mail.com>,
- *                Anton Shmigirilov <shmigirilov@gmail.com>
+ * (C) 2007-2015 Alex Zorg         <azorg@mail.com>,
+ *               Anton Shmigirilov <shmigirilov@gmail.com>
  * Licensed by GNU General Public License version 2
  */
 
@@ -189,8 +189,8 @@ STR_INLINE void str_free(str_t *s)
 }
 //---------------------------------------------------------------------------
 // protected functions
-void str_create_size(str_t *s, int size); // size > 0
-void str_create_cstr(str_t *s, const char *src); // src != NULL
+void _str_create_size(str_t *s, int size); // size > 0
+void _str_create_cstr(str_t *s, const char *src); // src != NULL
 //---------------------------------------------------------------------------
 // constructors
 STR_INLINE void str_init_zero(str_t *s)
@@ -200,7 +200,7 @@ STR_INLINE void str_init_chars(str_t *s, int size, char chr)
 {
   int i;
   s->sector = str_def_sector;
-  str_create_size(s, size);
+  _str_create_size(s, size);
   for (i = 0; i < size; i++) s->ptr[i] = chr;
 }
 //---------------------------------------------------------------------------
@@ -492,10 +492,10 @@ STR_INLINE str_t str_long2str(long value){ return str_long(value); }
 STR_INLINE str_t str_int2str(int value){ return str_int(value); }
 //---------------------------------------------------------------------------
 #ifdef STR_EXTRA
-// convert binary array to hex string (alya "01:23:AB:CD")
+// convert binary array to hex string (like "01:23:AB:CD")
 str_t str_bin2hex(const char *bin, int size);
 //---------------------------------------------------------------------------
-// convert hex string (alya "01:23:AB:CD") to binary array
+// convert hex string (like "01:23:AB:CD") to binary array
 str_t str_hex2bin(const char *str);
 #endif // STR_EXTRA
 //---------------------------------------------------------------------------

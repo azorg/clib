@@ -23,14 +23,14 @@ unsigned str_malloc_num = 0;
 unsigned str_malloc_bytes = 0;
 #endif // STR_DEBUG
 //---------------------------------------------------------------------------
-void str_create_size(str_t *s, int size) // size > 0
+void _str_create_size(str_t *s, int size) // size > 0
 {
   s->size = size;
-  size = (size + s->sector) / s->sector; // number of segmets "[(A+B-1)/B]"
+  size = (size + s->sector) / s->sector; // number of sectors "[(A+B-1+1)/B]"
   s->ptr = str_malloc(size * s->sector);
 }
 //---------------------------------------------------------------------------
-void str_create_cstr(str_t *s, const char *src) // src != NULL
+void _str_create_cstr(str_t *s, const char *src) // src != NULL
 {
   unsigned int seg;
   if ( (s->size = strlen(src)) == 0 )
@@ -52,7 +52,7 @@ void str_init_size_cstr(str_t *s, int size, const char *src)
     s->ptr = (char*) NULL;
     return;
   }
-  str_create_size(s, size);
+  _str_create_size(s, size);
   if (src != (const char *) NULL)
   {
     int i;
@@ -76,7 +76,7 @@ void str_init_cstr(str_t *s, const char *src)
     s->ptr = (char*) NULL;
     return;
   }
-  str_create_cstr(s, src);
+  _str_create_cstr(s, src);
 }
 //---------------------------------------------------------------------------
 void str_init_str(str_t *s, const str_t *src)
@@ -84,7 +84,7 @@ void str_init_str(str_t *s, const str_t *src)
   s->sector = src->sector; // legacy sector size
   if (src->size != 0)
   {
-    str_create_size(s, src->size);
+    _str_create_size(s, src->size);
     memcpy((void*) s->ptr, (const void*) src->ptr, s->size + 1);
   }
   else s->size = 0;
@@ -93,7 +93,7 @@ void str_init_str(str_t *s, const str_t *src)
 void str_init_char(str_t *s, char src)
 {
   s->sector = str_def_sector;
-  str_create_size(s, 1);
+  _str_create_size(s, 1);
   s->ptr[0] = src;
   s->ptr[1] = '\0';
 }
@@ -102,36 +102,42 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
 {
   str_t buf; // temp buffer for vsnprintf()
   int str_size;
+  va_list ap_copy;
 
-  // prepare buffer
+  // prepare temp buffer, set dafault sector size
+  s->sector  = str_def_sector;
   buf.sector = str_def_sector;
-  buf.size = str_def_sector - 1;
-  if (buf.size < 1) buf.size = 1;
-  str_create_size(&buf, buf.size);
+  str_size   = str_def_sector - 1;
+  if (str_size < 1) str_size = 1;
+  _str_create_size(&buf, str_size);
 
-  // try vsnprintf()
-  while (1)
-  {
-    str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap);
-    fprintf(stderr, ">>>1: %i - %s\n", str_size, buf.ptr);
-    str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap);
-    fprintf(stderr, ">>>2: %i - %s\n", str_size, buf.ptr);
-
+  // optimistic try vsnprintf() first
+  va_copy(ap_copy, ap);
+  str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap_copy);
+  va_end(ap_copy);
 #ifdef STR_DEBUG_EXTRA
-    fprintf(stderr, ">>> str_init_vsprintf(): str_size=%i buf.size=%i\n",
-                    str_size, buf.size);
+    fprintf(stderr, "str.c: vsnprintf(%i)=%i\n", buf.size, str_size);
 #endif // STR_DEBUG_EXTRA
 
-    if (str_size < buf.size)
-      break; // vsnprintf() return OK
+  // set valid string size
+  _str_create_size(s, str_size);
 
-    str_set_size(&buf, buf.size + str_def_sector); // increment buf size
+  if (str_size < buf.size)
+  { // vsnprintf() OK => copy to destination string
+    memcpy((void*) s->ptr, (const void*) buf.ptr, str_size + 1);
   }
+  else
+  { // second try vsnprintf()
+    va_copy(ap_copy, ap);
+    str_size = vsnprintf((char*) s->ptr, s->size + 1, fmt, ap_copy);
+    va_end(ap_copy);
 
-  // prepare and copy to destination string
-  s->sector = str_def_sector;
-  str_create_size(s, str_size);
-  memcpy((void*) s->ptr, (const void*) buf.ptr, str_size + 1);
+#ifdef STR_DEBUG_EXTRA
+    fprintf(stderr, "str.c: vsnprintf(%i)=%i\n", s->size, str_size);
+    if (str_size != s->size)
+      fprintf(stderr, "str.c: ERROR in str_init_vsnprintf()!\n");
+#endif // STR_DEBUG_EXTRA
+  }
 
   // free buffer
   str_free(&buf);
@@ -141,9 +147,9 @@ void str_init_bool(str_t *s, STR_BOOL src)
 {
   s->sector = str_def_sector;
   if (src)
-    str_create_cstr(s, STR_BOOL_TRUE_STR);
+    _str_create_cstr(s, STR_BOOL_TRUE_STR);
   else
-    str_create_cstr(s, STR_BOOL_FALSE_STR);
+    _str_create_cstr(s, STR_BOOL_FALSE_STR);
 }
 //---------------------------------------------------------------------------
 str_t str_hex(unsigned long value, int digits)
@@ -398,7 +404,7 @@ void str_assign(str_t *dst, const str_t *src)
     str_free(dst);
     if (src->size != 0)
     {
-      str_create_size(dst, src->size);
+      _str_create_size(dst, src->size);
       memcpy((void*) dst->ptr, (const void*) src->ptr, src->size + 1);
     }
     else dst->size = 0;
@@ -424,7 +430,7 @@ void str_assign_cstr(str_t *dst, const char *src)
     str_free(dst);
     if (src_size != 0)
     {
-      str_create_size(dst, src_size);
+      _str_create_size(dst, src_size);
       memcpy((void*) dst->ptr, (const void*) src, src_size + 1);
     }
     else dst->size = 0;
@@ -628,7 +634,7 @@ str_t str_substr(const str_t *s, int index, int count)
       count = s->size - index;
 
     r.sector = str_def_sector;
-    str_create_size(&r, count);
+    _str_create_size(&r, count);
     memcpy((void*) r.ptr, (const void*) (s->ptr + index), count);
     r.ptr[count] = '\0';
   }
@@ -739,7 +745,7 @@ str_t str_lower_case(const str_t *s)
     int i = s->size;
     char c, *src = s->ptr, *dst;
     r.sector = str_def_sector;
-    str_create_size(&r, s->size);
+    _str_create_size(&r, s->size);
     dst = r.ptr;
     while (i-- != 0)
     {
@@ -770,7 +776,7 @@ str_t str_upper_case(const str_t *s)
     int i = s->size;
     char c, *src = s->ptr, *dst;
     r.sector = str_def_sector;
-    str_create_size(&r, s->size);
+    _str_create_size(&r, s->size);
     dst = r.ptr;
     while (i-- != 0)
     {

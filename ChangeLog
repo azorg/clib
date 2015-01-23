@@ -3,6 +3,9 @@ ChangeLog of simple C/C++ library "clib"
  - removed
  * changed
 
+2015.01.23
+ * fix very old bug with secondary uses va_list is str.c (use va_copy)
+
 2015.01.22
  * back files from old backup and download to github with old bugs
 
