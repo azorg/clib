@@ -1,6 +1,5 @@
 clib
 ----
-
 str.h/str.c - simple C library for working with ASIZ and byte dynamic strings (str_t) 
 ini.h/ini.c - simple C library for working with INI files (ini_t)
 aini.h      - С++ wraper (aclass::aini) for working with INI-files with std::string
