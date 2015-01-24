@@ -1,0 +1,8 @@
+*.d
+*.o
+.dep
+.obj
+ini_test
+str_test
+aini_test
+

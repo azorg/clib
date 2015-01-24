@@ -1045,7 +1045,7 @@ str_t str_mul(const str_t *str, int times)
 }
 //---------------------------------------------------------------------------
 #ifdef STR_EXTRA
-// convert binary array to hex string (alya "01:23:AB:CD")
+// convert binary array to hex string (like "01:23:AB:CD")
 str_t str_bin2hex(const char *bin, int size)
 {
   str_t out;
@@ -1073,7 +1073,7 @@ str_t str_bin2hex(const char *bin, int size)
   return out;
 }
 //---------------------------------------------------------------------------
-// convert hex string (alya "01:23:AB:CD") to binary array
+// convert hex string (like "01:23:AB:CD") to binary array
 str_t str_hex2bin(const char *str)
 {
   int size;
