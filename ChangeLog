@@ -6,6 +6,7 @@ ChangeLog of simple C/C++ library "clib"
 2015.01.24
  * str_t: fix supposed bug with vsnprintf() under Windows
  * str_t: add '_' preffix to protected variables and functions
+ * add ".gitignore" file
 
 2015.01.23
  * fix very old bug with secondary uses va_list is str.c (use va_copy)
