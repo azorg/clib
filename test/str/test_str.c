@@ -1,3 +1,6 @@
+/*
+ * Unit test of `str_t` component
+ */
 
 #include "str.h"
 
@@ -194,11 +197,11 @@ int main()
 #ifdef STR_DEBUG
   if (1)
   {
-    if (str_malloc_num != 0 || str_malloc_bytes != 0)
+    if (_str_malloc_num != 0 || _str_malloc_bytes != 0)
       g_retv = -1;
     printf("\n");
-    printf("str_malloc_num = %u\n", str_malloc_num);
-    printf("str_malloc_bytes = %u\n", str_malloc_bytes);
+    printf("str_malloc_num   = %u\n", str_malloc_num());
+    printf("str_malloc_bytes = %u\n", str_malloc_bytes());
   }
 #endif // STR_DEBUG
 

@@ -104,16 +104,16 @@ typedef struct {
   int sector; // size of step of allocation of memory
 } str_t;
 //---------------------------------------------------------------------------
-extern char str_delim[]; // default trim delimiters
+extern char _str_delim[]; // default trim delimiters
 #ifdef STR_EXCEPTION_STRING
-extern char str_exstr[]; // exception string
+extern char _str_exstr[]; // exception string
 #endif // STR_EXCEPTION_STRING
-extern int str_def_sector; // default sector size
-extern char str_loc_al[]; // local alphabet low case
-extern char str_loc_au[]; // local alphabet upper case
+extern int  _str_def_sector; // default sector size
+extern char _str_loc_al[];   // local alphabet low case
+extern char _str_loc_au[];   // local alphabet upper case
 #ifdef STR_DEBUG
-extern unsigned str_malloc_num;
-extern unsigned str_malloc_bytes;
+extern unsigned _str_malloc_num;
+extern unsigned _str_malloc_bytes;
 #endif // STR_DEBUG
 //---------------------------------------------------------------------------
 #ifdef __cplusplus
@@ -121,30 +121,33 @@ extern "C"
 {
 #endif // __cplusplus
 //---------------------------------------------------------------------------
+// protected functions have '_' preffix
 // memory allocate functions
-STR_INLINE void* str_malloc_mem(int size)
+STR_INLINE void* _str_malloc_mem(int size)
 {
   void *ptr = malloc(size); // allocate memory
+#if defined(STR_DEBUG) || defined(STR_EXCEPTION_STRING) 
   if (ptr != (void*) NULL)
   {
 #ifdef STR_DEBUG
-    str_malloc_num++;
+    _str_malloc_num++;
 #endif // STR_DEBUG
   }
 #ifdef STR_EXCEPTION_STRING
   else
-    fprintf(stderr, str_exstr, size); // show exception
-#endif // STR_EXCEPTION_STRING
+    fprintf(stderr, _str_exstr, size); // show exception
+#  endif // STR_EXCEPTION_STRING
+#endif // STR_DEBUG || STR_EXCEPTION_STRING 
   return ptr;
 }
 //---------------------------------------------------------------------------
-STR_INLINE char* str_malloc(int size)
+STR_INLINE char* _str_malloc(int size)
 {
-  char *ptr = (char*) str_malloc_mem(size); // allocate memory
+  char *ptr = (char*) _str_malloc_mem(size); // allocate memory
 
 #ifdef STR_DEBUG
   if (ptr != (char*) NULL)
-    str_malloc_bytes += size;
+    _str_malloc_bytes += size;
 #endif // STR_DEBUG
 
 #ifdef STR_DEBUG_EXTRA
@@ -156,17 +159,26 @@ STR_INLINE char* str_malloc(int size)
 }
 //---------------------------------------------------------------------------
 // memory free functions
-STR_INLINE void str_free_mem(void *ptr)
+STR_INLINE void _str_free_mem(void *ptr)
 {
   if (ptr != (void*) NULL)
   {
 #ifdef STR_DEBUG
-    str_malloc_num--;
+    _str_malloc_num--;
 #endif // STR_DEBUG
     free(ptr);
   }
 }
 //---------------------------------------------------------------------------
+void _str_create_size(str_t *s, int size); // size > 0
+void _str_create_cstr(str_t *s, const char *src); // src != NULL
+//---------------------------------------------------------------------------
+#ifdef STR_DEBUG
+STR_INLINE unsigned str_malloc_num()   { return _str_malloc_num;   }
+STR_INLINE unsigned str_malloc_bytes() { return _str_malloc_bytes; } 
+#endif // STR_DEBUG
+//---------------------------------------------------------------------------
+// destructor (free memory)
 STR_INLINE void str_free(str_t *s)
 {
   if (s->size != 0)
@@ -176,10 +188,10 @@ STR_INLINE void str_free(str_t *s)
 #endif
 
 #ifdef STR_DEBUG
-    str_malloc_bytes -= s->sector * blk;
+    _str_malloc_bytes -= s->sector * blk;
 #endif // STR_DEBUG
 
-    str_free_mem((void*) s->ptr);
+    _str_free_mem((void*) s->ptr);
 
 #ifdef STR_DEBUG_EXTRA
     if (s->ptr != (char*) NULL)
@@ -188,18 +200,14 @@ STR_INLINE void str_free(str_t *s)
   }
 }
 //---------------------------------------------------------------------------
-// protected functions
-void _str_create_size(str_t *s, int size); // size > 0
-void _str_create_cstr(str_t *s, const char *src); // src != NULL
-//---------------------------------------------------------------------------
 // constructors
 STR_INLINE void str_init_zero(str_t *s)
-{ s->sector = str_def_sector; s->size = 0; s->ptr = (char*) NULL; }
+{ s->sector = _str_def_sector; s->size = 0; s->ptr = (char*) NULL; }
 //---------------------------------------------------------------------------
 STR_INLINE void str_init_chars(str_t *s, int size, char chr)
 {
   int i;
-  s->sector = str_def_sector;
+  s->sector = _str_def_sector;
   _str_create_size(s, size);
   for (i = 0; i < size; i++) s->ptr[i] = chr;
 }
@@ -441,17 +449,18 @@ str_t str_upper_case(const str_t *s);
 str_t str_trim_ex(const str_t *s, const char *delim);
 //---------------------------------------------------------------------------
 STR_INLINE str_t str_trim(const str_t *s)
-{ return str_trim_ex(s, str_delim); }
+{ return str_trim_ex(s, _str_delim); }
 //---------------------------------------------------------------------------
 str_t str_trim_left_ex(const str_t *s, const char *delim);
 //---------------------------------------------------------------------------
 STR_INLINE str_t str_trim_left(const str_t *s)
-{ return str_trim_left_ex(s, str_delim); }
+{ return str_trim_left_ex(s, _str_delim); }
 //---------------------------------------------------------------------------
 str_t str_trim_right_ex(const str_t *s, const char *delim);
 //---------------------------------------------------------------------------
 STR_INLINE str_t str_trim_right(const str_t *s)
-{ return str_trim_right_ex(s, str_delim); }
+{ return str_trim_right_ex(s, _str_delim); }
+//---------------------------------------------------------------------------
 void str_swap(str_t *s1, str_t *s2);
 //---------------------------------------------------------------------------
 // modify string
@@ -469,17 +478,18 @@ void str_fill(str_t *s, char chr, int index, int count);
 void str_set_sector(str_t *s, int new_sector);
 //---------------------------------------------------------------------------
 STR_INLINE void str_set_def_sector(int new_def_sector)
-{ str_def_sector = new_def_sector; }
+{ _str_def_sector = new_def_sector; }
+//---------------------------------------------------------------------------
+STR_INLINE int str_get_def_sector() { return _str_def_sector; }
 //---------------------------------------------------------------------------
 // scrolling
 void str_rol(str_t *s, int count); // left scrolling
 void str_ror(str_t *s, int count); // right scrolling
 //---------------------------------------------------------------------------
 // query attributes of string
-STR_INLINE int str_size(const str_t *s) { return s->size; }
-STR_INLINE int str_get_size(const str_t *s) { return s->size; }
+STR_INLINE int str_size      (const str_t *s) { return s->size; }
+STR_INLINE int str_get_size  (const str_t *s) { return s->size; }
 STR_INLINE int str_get_sector(const str_t *s) { return s->sector; }
-STR_INLINE int str_get_def_sector() { return str_def_sector; }
 //---------------------------------------------------------------------------
 // multiplications
 str_t str_mul(const str_t *str, int times);

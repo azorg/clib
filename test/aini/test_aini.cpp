@@ -1,3 +1,7 @@
+/*
+ * Unit test of `aclass::aini` class
+ */
+
 
 #include <math.h>
 #include "aini.h"
@@ -300,9 +304,9 @@ int main()
   if(1)
   {
     printf("\n");
-    printf("str_malloc_num = %u\n", str_malloc_num);
-    printf("str_malloc_bytes = %u\n", str_malloc_bytes);
-    if (str_malloc_num != 0 || str_malloc_bytes != 0)
+    printf("str_malloc_num   = %u\n", str_malloc_num());
+    printf("str_malloc_bytes = %u\n", str_malloc_bytes());
+    if (str_malloc_num() != 0 || str_malloc_bytes() != 0)
       g_err++;
   }
 #endif // STR_DEBUG

@@ -10,24 +10,24 @@
 //---------------------------------------------------------------------------
 #include "str.h"
 //---------------------------------------------------------------------------
-char str_delim[] = STR_TRIM_DELIMITERS; // default trim delimiters
+char _str_delim[] = STR_TRIM_DELIMITERS; // default trim delimiters
 #ifdef STR_EXCEPTION_STRING
-char str_exstr[] = STR_EXCEPTION_STRING; // exception string
+char _str_exstr[] = STR_EXCEPTION_STRING; // exception string
 #endif // STR_EXCEPTION_STRING
-int str_def_sector = STR_DEF_SECTOR_SIZE; // sector default value
-char str_loc_al[] = STR_LOCAL_AL; // local alphabet low case
-char str_loc_au[] = STR_LOCAL_AU; // local alphabet upper case
+int  _str_def_sector = STR_DEF_SECTOR_SIZE; // sector default value
+char _str_loc_al[]   = STR_LOCAL_AL; // local alphabet low case
+char _str_loc_au[]   = STR_LOCAL_AU; // local alphabet upper case
 //---------------------------------------------------------------------------
 #ifdef STR_DEBUG
-unsigned str_malloc_num = 0;
-unsigned str_malloc_bytes = 0;
+unsigned _str_malloc_num   = 0;
+unsigned _str_malloc_bytes = 0;
 #endif // STR_DEBUG
 //---------------------------------------------------------------------------
 void _str_create_size(str_t *s, int size) // size > 0
 {
   s->size = size;
   size = (size + s->sector) / s->sector; // number of sectors "[(A+B-1+1)/B]"
-  s->ptr = str_malloc(size * s->sector);
+  s->ptr = _str_malloc(size * s->sector);
 }
 //---------------------------------------------------------------------------
 void _str_create_cstr(str_t *s, const char *src) // src != NULL
@@ -38,14 +38,14 @@ void _str_create_cstr(str_t *s, const char *src) // src != NULL
     s->ptr = (char*) NULL;
     return;
   }
-  seg = (s->size + s->sector) / s->sector; // segments "[(A+B-1)/B]"
-  s->ptr = str_malloc(seg * s->sector);
+  seg = (s->size + s->sector) / s->sector; // segments "[(A+B-1+1)/B]"
+  s->ptr = _str_malloc(seg * s->sector);
   memcpy((void*) s->ptr, (const void*) src, s->size + 1);
 }
 //---------------------------------------------------------------------------
 void str_init_size_cstr(str_t *s, int size, const char *src)
 {
-  s->sector = str_def_sector;
+  s->sector = _str_def_sector;
   if (size <= 0)
   {
     s->size = 0;
@@ -69,7 +69,7 @@ void str_init_size_cstr(str_t *s, int size, const char *src)
 //---------------------------------------------------------------------------
 void str_init_cstr(str_t *s, const char *src)
 {
-  s->sector = str_def_sector;
+  s->sector = _str_def_sector;
   if (src == (const char *) NULL)
   {
     s->size = 0;
@@ -92,7 +92,7 @@ void str_init_str(str_t *s, const str_t *src)
 //---------------------------------------------------------------------------
 void str_init_char(str_t *s, char src)
 {
-  s->sector = str_def_sector;
+  s->sector = _str_def_sector;
   _str_create_size(s, 1);
   s->ptr[0] = src;
   s->ptr[1] = '\0';
@@ -105,9 +105,9 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
   va_list ap_copy;
 
   // prepare temp buffer, set dafault sector size
-  s->sector  = str_def_sector;
-  buf.sector = str_def_sector;
-  str_size   = str_def_sector - 1;
+  s->sector  = _str_def_sector;
+  buf.sector = _str_def_sector;
+  str_size   = _str_def_sector - 1;
   if (str_size < 1) str_size = 1;
   _str_create_size(&buf, str_size);
 
@@ -145,7 +145,7 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
 //---------------------------------------------------------------------------
 void str_init_bool(str_t *s, STR_BOOL src)
 {
-  s->sector = str_def_sector;
+  s->sector = _str_def_sector;
   if (src)
     _str_create_cstr(s, STR_BOOL_TRUE_STR);
   else
@@ -453,12 +453,12 @@ void str_add(str_t *s, const str_t *add)
   }
   else
   {
-    char *new_ptr = str_malloc(b_new * s->sector);
+    char *new_ptr = _str_malloc(b_new * s->sector);
     memcpy((void*) new_ptr, (const void*) s->ptr, s->size);
     memcpy((void*) &new_ptr[s->size], (const void*) add->ptr, add->size + 1);
     str_free(s);
     s->size = new_size;
-    s->ptr = new_ptr;
+    s->ptr  = new_ptr;
   }
 }
 //---------------------------------------------------------------------------
@@ -480,12 +480,12 @@ void str_add_cstr(str_t *s, const char *add)
   }
   else
   {
-    char *new_ptr = str_malloc(b_new * s->sector);
+    char *new_ptr = _str_malloc(b_new * s->sector);
     memcpy((void*) new_ptr, (const void*) s->ptr, s->size);
     memcpy((void*) &new_ptr[s->size], (const void*) add, add_size + 1);
     str_free(s);
     s->size = new_size;
-    s->ptr = new_ptr;
+    s->ptr  = new_ptr;
   }
 }
 //---------------------------------------------------------------------------
@@ -501,7 +501,7 @@ void str_add_char(str_t *s, char add)
   }
   else
   {
-    char *new_ptr = str_malloc(b_new * s->sector);
+    char *new_ptr = _str_malloc(b_new * s->sector);
     if (s->size != 0)
     {
       memcpy((void*) new_ptr, (const void*) s->ptr, s->size);
@@ -534,7 +534,7 @@ str_t str_sum(const char *fmt, ...)
   // allocate temp buffer
   if (num > STR_SUM_MAX_ITEM)
     lst = (struct str_sum_list*)
-          str_malloc_mem(sizeof(struct str_sum_list) * num);
+          _str_malloc_mem(sizeof(struct str_sum_list) * num);
 
   va_start(ap, fmt);
   for (i = 0; i < num; i++)
@@ -598,7 +598,7 @@ str_t str_sum(const char *fmt, ...)
 
   // free buffer
   if (num > STR_SUM_MAX_ITEM)
-    str_free_mem((void*) lst);
+    _str_free_mem((void*) lst);
 
   return s;
 }
@@ -633,7 +633,7 @@ str_t str_substr(const str_t *s, int index, int count)
     if (count < 0 || count > (s->size - index))
       count = s->size - index;
 
-    r.sector = str_def_sector;
+    r.sector = _str_def_sector;
     _str_create_size(&r, count);
     memcpy((void*) r.ptr, (const void*) (s->ptr + index), count);
     r.ptr[count] = '\0';
@@ -744,7 +744,7 @@ str_t str_lower_case(const str_t *s)
   {
     int i = s->size;
     char c, *src = s->ptr, *dst;
-    r.sector = str_def_sector;
+    r.sector = _str_def_sector;
     _str_create_size(&r, s->size);
     dst = r.ptr;
     while (i-- != 0)
@@ -754,9 +754,9 @@ str_t str_lower_case(const str_t *s)
         c += 'a'-'A'; // convert ASCII symbol
       else
       {
-        p = strchr(str_loc_au, (unsigned) c); // find in upper case
+        p = strchr(_str_loc_au, (unsigned) c); // find in upper case
         if (p != (char*) NULL) // convert KOI8-R/CP1251/CP866 symbol
-          c = str_loc_al[(int)(p - str_loc_au)];
+          c = _str_loc_al[(int)(p - _str_loc_au)];
       }
       *dst++ = c;
     }
@@ -775,7 +775,7 @@ str_t str_upper_case(const str_t *s)
   {
     int i = s->size;
     char c, *src = s->ptr, *dst;
-    r.sector = str_def_sector;
+    r.sector = _str_def_sector;
     _str_create_size(&r, s->size);
     dst = r.ptr;
     while (i-- != 0)
@@ -785,9 +785,9 @@ str_t str_upper_case(const str_t *s)
         c -= 'a' - 'A'; // convert ASCII symbol
       else
       {
-        p = strchr(str_loc_al, (unsigned) c); // find in low case
+        p = strchr(_str_loc_al, (unsigned) c); // find in low case
         if (p != NULL) // convert KOI8-R/CP1251/CP866 symbol
-          c = str_loc_au[(int)(p - str_loc_al)];
+          c = _str_loc_au[(int)(p - _str_loc_al)];
       }
       *dst++ = c;
     }
@@ -848,7 +848,7 @@ void str_set_size(str_t *s, int new_size)
       s->size = 0;
       return;
     }
-    new_ptr = str_malloc(b_new * s->sector);
+    new_ptr = _str_malloc(b_new * s->sector);
     if (s->size != 0)
       memcpy((void*) new_ptr, (const void*) s->ptr,
              (new_size > s->size ? s->size : new_size));
@@ -879,7 +879,7 @@ void str_insert(str_t *s, const str_t *str, int index)
   }
   else
   {
-    char *new_ptr = str_malloc(b_new * s->sector);
+    char *new_ptr = _str_malloc(b_new * s->sector);
     if (index != 0)
       memcpy(new_ptr, s->ptr, index);
     memcpy(new_ptr + index, str->ptr, str->size);
@@ -931,7 +931,7 @@ void str_delete(str_t *s, int index, int count)
     }
     else
     {
-      char *new_ptr = str_malloc(b_new * s->sector);
+      char *new_ptr = _str_malloc(b_new * s->sector);
       if (index != 0)
         memcpy(new_ptr, s->ptr, index);
       if (tail != 0)
@@ -980,7 +980,7 @@ void str_set_sector(str_t *s, int new_sector)
     b_new *= new_sector;
     if ((b_cur * s->sector) != b_new)
     {
-      char *new_ptr = str_malloc(b_new);
+      char *new_ptr = _str_malloc(b_new);
       memcpy(new_ptr, s->ptr, s->size + 1);
       str_free(s);
       s->ptr = new_ptr;
