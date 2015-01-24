@@ -477,8 +477,8 @@ STR_INLINE void str_clear(str_t *s)
 void str_fill(str_t *s, char chr, int index, int count);
 void str_set_sector(str_t *s, int new_sector);
 //---------------------------------------------------------------------------
-STR_INLINE void str_set_def_sector(int new_def_sector)
-{ _str_def_sector = new_def_sector; }
+STR_INLINE void str_set_def_sector(int def_sector)
+{ _str_def_sector = def_sector > 0 ? def_sector : 1; }
 //---------------------------------------------------------------------------
 STR_INLINE int str_get_def_sector() { return _str_def_sector; }
 //---------------------------------------------------------------------------

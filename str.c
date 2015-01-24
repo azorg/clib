@@ -111,29 +111,45 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
   if (str_size < 1) str_size = 1;
   _str_create_size(&buf, str_size);
 
-  // optimistic try vsnprintf() first
+  // optimistic try vsnprintf() first time
   va_copy(ap_copy, ap);
   str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap_copy);
   va_end(ap_copy);
 #ifdef STR_DEBUG_EXTRA
-    fprintf(stderr, "str.c: vsnprintf(%i)=%i\n", buf.size, str_size);
+  fprintf(stderr, "str.c: 1.vsnprintf(%i)=%i '%s'\n",
+          buf.size, str_size, buf.ptr);
 #endif // STR_DEBUG_EXTRA
+
+  while (str_size < 0)
+  { // it's may be Windows
+    str_set_size(&buf, buf.size + _str_def_sector); // increment buf size
+    
+    // try vsnprintf() again
+    va_copy(ap_copy, ap);
+    str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap_copy);
+    va_end(ap_copy);
+#ifdef STR_DEBUG_EXTRA
+    fprintf(stderr, "str.c: 2.vsnprintf(%i)=%i '%s'\n",
+            buf.size, str_size, buf.ptr);
+#endif // STR_DEBUG_EXTRA
+  }
 
   // set valid string size
   _str_create_size(s, str_size);
 
-  if (str_size < buf.size)
+  if (str_size >= 0 && str_size < buf.size)
   { // vsnprintf() OK => copy to destination string
     memcpy((void*) s->ptr, (const void*) buf.ptr, str_size + 1);
   }
   else
-  { // second try vsnprintf()
+  { // last try vsnprintf()
     va_copy(ap_copy, ap);
     str_size = vsnprintf((char*) s->ptr, s->size + 1, fmt, ap_copy);
     va_end(ap_copy);
 
 #ifdef STR_DEBUG_EXTRA
-    fprintf(stderr, "str.c: vsnprintf(%i)=%i\n", s->size, str_size);
+    fprintf(stderr, "str.c: 3.vsnprintf(%i)=%i '%s'\n",
+            s->size + 1, str_size, s->ptr);
     if (str_size != s->size)
       fprintf(stderr, "str.c: ERROR in str_init_vsnprintf()!\n");
 #endif // STR_DEBUG_EXTRA

@@ -10,7 +10,7 @@ CLEAN_FILES := test_file?.txt
 SRCS := ../../str.c \
         test_str.c
 
-DEFS    := -DSTR_DEBUG -DSTR_DEBUG_EXTRA -DSTR_DEF_SECTOR_SIZE="4"
+DEFS    := -DSTR_DEBUG -DSTR_DEBUG_EXTRA -DSTR_DEF_SECTOR_SIZE="7"
 #-DSTR_INLINE="static inline"
 OPT     := -g -O0 -std=gnu90
 #OPT     := -Os -fomit-frame-pointer

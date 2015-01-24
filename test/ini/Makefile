@@ -11,7 +11,7 @@ SRCS := ../../str.c \
         ../../ini.c \
         test_ini.c
 
-DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3"
+DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="2"
 #-DINI_INLINE="static inline"
 OPT     := -Os -fomit-frame-pointer
 CFLAGS  := $(DEFS) $(OPT) -pipe -Wall

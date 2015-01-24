@@ -13,7 +13,7 @@
 
 int main()
 {
-  int g_err = 0;
+  int g_err = 0; // number of errors
 
   if (1)
   { // "initile_t" - write
@@ -340,7 +340,7 @@ int main()
   else
     printf("\n>>> errors = %i\n", g_err);
 
-  return 0;
+  return g_err;
 }
 
 /*** end of "test_ini.c" ***/

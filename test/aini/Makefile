@@ -11,7 +11,7 @@ SRCS := ../../str.c \
         ../../ini.c \
 	test_aini.cpp
 
-DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="1"
+DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3"
 #-DINI_INLINE="static inline"
 OPT     := -Os -fomit-frame-pointer
 CFLAGS   := $(DEFS) $(OPT) -pipe -Wall
