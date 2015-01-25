@@ -46,7 +46,7 @@ int main()
       str_t s;
       STR_UINT64 i64;
       STR_INT64  u64;
-      printf("sezeof(STR_INT64) = %i\n", sizeof(STR_INT64));
+      printf("sezeof(STR_INT64) = %i\n", (int) sizeof(STR_INT64));
 
       i64 = 1234567890123456789LL;
       s = str_int64(i64);
