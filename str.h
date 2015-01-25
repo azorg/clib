@@ -1,26 +1,33 @@
 /*
  * Project: C string type
- * Version: 0.1b
+ * Version: 0.2b
  * File: "str.h"
- * (C) 2007-2015 Alex Zorg         <azorg@mail.com>,
- *               Anton Shmigirilov <shmigirilov@gmail.com>
+ * (C) 2007-2015 Alex Zorg <azorg@mail.com>,
  * Licensed by GNU General Public License version 2
  */
 
 #ifndef STR_H
 #define STR_H
 //---------------------------------------------------------------------------
+#ifdef _WIN32 // use "deprecated" fopen(), vsnprintf() under Visual C++
+#  define _CRT_SECURE_NO_DEPRECATE
+#endif
+//---------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h> // va_list, va_start, va_end, va_arg, vsnprintf()
 //---------------------------------------------------------------------------
-// inline macro
+// inline macro (platform depended)
 #ifndef STR_INLINE
 #  if __GNUC__
 #    define STR_INLINE static inline
 #  else
-#    define STR_INLINE inline
+#    ifdef _WIN32 // Visual C++
+#      define STR_INLINE __forceinline
+#    else
+#      define STR_INLINE inline
+#    endif
 #  endif
 #endif // STR_INLINE
 //---------------------------------------------------------------------------
@@ -29,8 +36,26 @@
 //#define STR_DEBUG_EXTRA
 
 // if type 'int64' exist
-#define STR_INT64 long long
-//#define STR_INT64 __int64
+#define STR_INT64  long long
+#define STR_UINT64 unsigned long long
+//#define STR_INT64   __int64
+//#define STR_UINT64 __uint64
+//#define STR_INT64   int64_t
+//#define STR_UINT64 uint64_t
+
+#ifdef STR_INT64
+//#  include <inttypes.h>
+// int64 printf() formats:
+#  if 0 // FIXME
+#    define STR_PRId64 "lld"
+#    define STR_PRIu64 "llu"
+#    define STR_PRIx64 "llX"
+#  else // mingw
+#    define STR_PRId64 "I64d"
+#    define STR_PRIu64 "I64u"
+#    define STR_PRIx64 "I64X"
+#  endif
+#endif // STR_INT64
 
 // include some extra function
 #define STR_EXTRA
@@ -249,13 +274,13 @@ STR_INLINE void str_init_ulong(str_t *s, unsigned long src)
 //---------------------------------------------------------------------------
 #ifdef STR_INT64
 STR_INLINE void str_init_int64(str_t *s, STR_INT64 src)
-{ str_init_sprintf(s, "%Li", src); }
+{ str_init_sprintf(s, "%" STR_PRId64, src); }
 //---------------------------------------------------------------------------
-STR_INLINE void str_init_uint64(str_t *s, unsigned STR_INT64 src)
-{ str_init_sprintf(s, "%Lu", src); }
+STR_INLINE void str_init_uint64(str_t *s, STR_UINT64 src)
+{ str_init_sprintf(s, "%" STR_PRIu64, src); }
 //---------------------------------------------------------------------------
 STR_INLINE void str_init_int64_hex(str_t *s, STR_INT64 src)
-{ str_init_sprintf(s, "%LX", src); }
+{ str_init_sprintf(s, "%" STR_PRIx64, src); }
 #endif // STR_INT64
 //---------------------------------------------------------------------------
 #ifdef STR_FLOAT
@@ -312,7 +337,7 @@ STR_INLINE str_t str_ulong(unsigned long src)
 STR_INLINE str_t str_int64(STR_INT64 src)
 { str_t s; str_init_int64(&s, src); return s; }
 //---------------------------------------------------------------------------
-STR_INLINE str_t str_uint64(unsigned STR_INT64 src)
+STR_INLINE str_t str_uint64(STR_UINT64 src)
 { str_t s; str_init_uint64(&s, src); return s; }
 //---------------------------------------------------------------------------
 STR_INLINE str_t str_int64_hex(STR_INT64 src)

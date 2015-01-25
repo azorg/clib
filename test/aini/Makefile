@@ -1,7 +1,7 @@
 OUT_NAME     := ini_test
 OUT_DIR      := .
 #INC_DIRS    :=
-#CLEAN_FILES := "$(OUT_DIR)/$(OUT_NAME).map"
+CLEAN_FILES := "$(OUT_DIR)/$(OUT_NAME).exe"
 
 # 1-st way to select source files
 #SRC_DIRS := . 

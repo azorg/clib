@@ -6,9 +6,9 @@
 #include <math.h>
 #include "aini.h"
 
-//#ifndef M_PI
-//#define M_PI 3.1415
-//#endif
+#ifndef M_PI
+#define M_PI 3.1415
+#endif
 
 int main()
 {
@@ -206,10 +206,10 @@ int main()
     
     f.write_str("", "first ident", "hello world");
     f.write_str("s2", "additional", "end of section");
-    f.write_float ("math", "Pi_f", M_PI);
+    f.write_float ("math", "Pi_f", (float) M_PI);
     f.write_double("math", "Pi_d", M_PI);
     f.write_double("math", "Pi_d * 1e-12", M_PI * 1e-12);
-    f.write_float ("math", "123.456_f", 123.456);
+    f.write_float ("math", "123.456_f", (float) 123.456);
     f.write_double("math", "123.456_d", 123.456);
     
     if (!f.save(true))
@@ -233,7 +233,7 @@ int main()
      i = f.read_int64("int64", "i64", 123);
      if (i != j)
      {
-       printf("error in int64: %LX != %LX)\n", i, j);
+       printf("error in int64: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, j);
        g_err++;
      }
      else
@@ -254,7 +254,7 @@ int main()
      pi = (STR_INT64 *) bin.c_str();
      if (i != *pi)
      {
-       printf("error in bin: %LX != %LX)\n", i, *pi);
+       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, *pi);
        g_err++;
      }
      else

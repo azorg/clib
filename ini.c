@@ -547,7 +547,7 @@ float ini_read_float(ini_t *f,
 {
   str_t def = str_float(default_value);
   str_t val = ini_read_value(f, section, ident, str_c(&def)); 
-  float retv = str_size(&val) ? str_to_float(&val) : default_value;
+  float retv = str_size(&val) ? (float) str_to_float(&val) : default_value;
   str_free(&val);
   str_free(&def);
   return retv;

@@ -19,16 +19,57 @@ void print_ok(int ok)
 
 int main()
 {
-
   int def_sec;
   for (def_sec = 1; def_sec <= 16; def_sec++)
   {
     str_set_def_sector(def_sec);
-    printf("\nstr_set_def_sector(%i)", def_sec);
+    printf("\nstr_set_def_sector(%i) ------------------------------ ", def_sec);
     print_ok(str_get_def_sector() == def_sec);
 
     if (1)
-    { // str_init(), str_c(), 
+    { // str_sprintf("%s", ""), str_c()
+      str_t s;
+      s = str_sprintf("%s", "");
+      printf("str_sprintf('s', '') = '%s'", str_c(&s));
+      print_ok(str_is_equal_cstr(&s, ""));
+      str_free(&s);
+
+      s = str_sprintf("%s", "Hello!");
+      printf("str_sprintf('s', 'Hello!') = '%s'", str_c(&s));
+      print_ok(str_is_equal_cstr(&s, "Hello!"));
+      str_free(&s);
+    }
+
+#ifdef STR_INT64
+    if (1)
+    { // int64
+      str_t s;
+      STR_UINT64 i64;
+      STR_INT64  u64;
+      printf("sezeof(STR_INT64) = %i\n", sizeof(STR_INT64));
+
+      i64 = 1234567890123456789LL;
+      s = str_int64(i64);
+      printf("str_int64(1234567890123456789) = '%s'", str_c(&s));
+      print_ok(str_is_equal_cstr(&s, "1234567890123456789"));
+      str_free(&s);
+
+      u64 = 18446700000000000000ULL;
+      s = str_uint64(u64);
+      printf("str_int64(18446700000000000000ULL) = '%s'", str_c(&s));
+      print_ok(str_is_equal_cstr(&s, "18446700000000000000"));
+      str_free(&s);
+
+      i64 = 0x12345678aBcDEf0FLL; // int64
+      s = str_int64_hex(i64);
+      printf("str_int64_hex(0x12345678aBcDEf0FLL) = '%s'", str_c(&s));
+      print_ok(str_is_equal_cstr(&s, "12345678ABCDEF0F"));
+      str_free(&s);
+    }
+#endif
+
+    if (1)
+    { // str_int(), str_c(), 
       str_t s;
       s = str_int(12345);
       printf("str_int(12345) = '%s'", str_c(&s));
@@ -51,7 +92,7 @@ int main()
       print_ok(str_is_equal_cstr(&s, "One"));
       str_free(&s);
     }
-      
+  
     if (1)
     { // str_add(), str_add_char, str_add_cstr() 
       str_t s1 = str_cstr("abc");
@@ -200,6 +241,7 @@ int main()
       printf("str_to_bool('00') = %u\n", (int) b);
       str_free(&s);
     }
+    //break; //!!!
   } // for(..
     
 #ifdef STR_DEBUG

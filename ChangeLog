@@ -3,6 +3,10 @@ ChangeLog of simple C/C++ library "clib"
  - removed
  * changed
 
+2015.01.26
+ * test `str_t` under Visual Studio / MinGW and fix bugs (near vsnprintf() again)
+ * fix some bugs with int64
+
 2015.01.24
  * str_t: fix supposed bug with vsnprintf() under Windows
  * str_t: add '_' preffix to protected variables and functions

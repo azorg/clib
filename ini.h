@@ -11,12 +11,16 @@
 //---------------------------------------------------------------------------
 #include "str.h" // 'str_t'
 //---------------------------------------------------------------------------
-// inline macro
+// inline macro (platform depended)
 #ifndef INI_INLINE
 #  if __GNUC__
 #    define INI_INLINE static inline
 #  else
-#    define INI_INLINE inline
+#    ifdef _WIN32 // Visual C++
+#      define INI_INLINE __forceinline
+#    else
+#      define INI_INLINE inline
+#    endif
 #  endif
 #endif // INI_INLINE
 //---------------------------------------------------------------------------

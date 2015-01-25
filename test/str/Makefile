@@ -1,7 +1,7 @@
 OUT_NAME     := test_str
 OUT_DIR      := .
 #INC_DIRS    :=
-CLEAN_FILES := test_file?.txt
+CLEAN_FILES := test_file?.txt "$(OUT_DIR)/$(OUT_NAME).exe"
 
 # 1-st way to select source files
 #SRC_DIRS := .

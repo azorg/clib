@@ -221,10 +221,10 @@ int main()
     
     ini_write_str(&f, "", "first ident", "hello world");
     ini_write_str(&f, "s2", "additional", "end of section");
-    ini_write_float (&f, "math", "Pi_f", M_PI);
+    ini_write_float (&f, "math", "Pi_f", (float) M_PI);
     ini_write_double(&f, "math", "Pi_d", M_PI);
     ini_write_double(&f, "math", "Pi_d * 1e-12", M_PI * 1e-12);
-    ini_write_float (&f, "math", "123.456_f", 123.456);
+    ini_write_float (&f, "math", "123.456_f", (float) 123.456);
     ini_write_double(&f, "math", "123.456_d", 123.456);
     
     if (!ini_save(&f))
@@ -249,7 +249,7 @@ int main()
      i = ini_read_int64(&f, "int64", "i64", 123);
      if (i != j)
      {
-       printf("error in int64: %LX != %LX)\n", i, j);
+       printf("error in int64: %" STR_PRIu64 " != %" STR_PRIu64 "\n", i, j);
        g_err++;
      }
      else
@@ -271,7 +271,7 @@ int main()
      pi = (STR_INT64 *) str_c(&bin);
      if (i != *pi)
      {
-       printf("error in bin: %LX != %LX)\n", i, *pi);
+       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, *pi);
        g_err++;
      }
      else

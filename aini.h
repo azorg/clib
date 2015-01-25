@@ -291,13 +291,13 @@ public:
                            const char *ident,
                            double default_value)
   {
-    return ini_read_double(&f, section, ident, default_value);
+    return (float) ini_read_double(&f, section, ident, default_value);
   }
   inline float read_double(const std::string &section,
                            const std::string &ident,
                            double default_value)
   {
-    return ini_read_double(&f, section.c_str(), ident.c_str(), default_value);
+    return (float) ini_read_double(&f, section.c_str(), ident.c_str(), default_value);
   }
   
   // write value as double

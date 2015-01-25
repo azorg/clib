@@ -1,9 +1,8 @@
 /*
  * Project: C string type
- * Version: 0.1b
+ * Version: 0.2b
  * File: "str.c"
- * (C) 2007-2015 Alex Zorg         <azorg@mail.ru>,
- *               Anton Shmigirilov <shmigirilov@gmail.com>
+ * (C) 2007-2015 Alex Zorg <azorg@mail.ru>,
  * Licensed by GNU General Public License version 2
  */
 
@@ -116,12 +115,13 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
   str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap_copy);
   va_end(ap_copy);
 #ifdef STR_DEBUG_EXTRA
+  buf.ptr[buf.size] = '\0';
   fprintf(stderr, "str.c: 1.vsnprintf(%i)=%i '%s'\n",
           buf.size, str_size, buf.ptr);
 #endif // STR_DEBUG_EXTRA
 
   while (str_size < 0)
-  { // it's may be Windows
+  { // it's may be Windows (or HP-UX?)
     str_set_size(&buf, buf.size + _str_def_sector); // increment buf size
     
     // try vsnprintf() again
@@ -129,30 +129,37 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
     str_size = vsnprintf((char*) buf.ptr, buf.size, fmt, ap_copy);
     va_end(ap_copy);
 #ifdef STR_DEBUG_EXTRA
+    buf.ptr[buf.size] = '\0';
     fprintf(stderr, "str.c: 2.vsnprintf(%i)=%i '%s'\n",
             buf.size, str_size, buf.ptr);
 #endif // STR_DEBUG_EXTRA
   }
 
-  // set valid string size
-  _str_create_size(s, str_size);
+  if (str_size != 0)
+  { // set valid string size
+    _str_create_size(s, str_size);
 
-  if (str_size >= 0 && str_size < buf.size)
-  { // vsnprintf() OK => copy to destination string
-    memcpy((void*) s->ptr, (const void*) buf.ptr, str_size + 1);
-  }
-  else
-  { // last try vsnprintf()
-    va_copy(ap_copy, ap);
-    str_size = vsnprintf((char*) s->ptr, s->size + 1, fmt, ap_copy);
-    va_end(ap_copy);
+    if (str_size < buf.size)
+    { // vsnprintf() OK => copy to destination string
+      memcpy((void*)s->ptr, (const void*)buf.ptr, str_size + 1);
+    }
+    else
+    { // last try vsnprintf()
+      va_copy(ap_copy, ap);
+      str_size = vsnprintf((char*)s->ptr, s->size + 1, fmt, ap_copy);
+      va_end(ap_copy);
 
 #ifdef STR_DEBUG_EXTRA
-    fprintf(stderr, "str.c: 3.vsnprintf(%i)=%i '%s'\n",
-            s->size + 1, str_size, s->ptr);
-    if (str_size != s->size)
-      fprintf(stderr, "str.c: ERROR in str_init_vsnprintf()!\n");
+      fprintf(stderr, "str.c: 3.vsnprintf(%i)=%i '%s'\n",
+        s->size + 1, str_size, s->ptr);
+      if (str_size != s->size)
+        fprintf(stderr, "str.c: ERROR in str_init_vsnprintf()!\n");
 #endif // STR_DEBUG_EXTRA
+    }
+  }
+  else // str_size == 0
+  { // empty string
+    s->size = 0;
   }
 
   // free buffer
@@ -580,7 +587,7 @@ str_t str_sum(const char *fmt, ...)
 #endif // STR_INT64
 #ifdef STR_FLOAT
       else if (c == 'f')
-	str_init_float(p, va_arg(ap, double));
+	str_init_float(p, (float) va_arg(ap, double));
       else if (c == 'd')
 	str_init_double(p, va_arg(ap, double));
 #endif // STR_FLOAT
@@ -939,10 +946,10 @@ void str_delete(str_t *s, int index, int count)
       if (tail != 0)
       {
         char *src = s->ptr + index + count;
-	char *dst = s->ptr + index;
+        char *dst = s->ptr + index;
         do
-	  *dst++ = *src++;
-	while (--tail != 0);
+          *dst++ = *src++;
+        while (--tail != 0);
       }
     }
     else
@@ -953,10 +960,10 @@ void str_delete(str_t *s, int index, int count)
       if (tail != 0)
       {
         char *src = s->ptr + index + count;
-	char *dst = new_ptr + index;
+        char *dst = new_ptr + index;
         do
-	  *dst++ = *src++;
-	while (--tail != 0);
+          *dst++ = *src++;
+        while (--tail != 0);
       }
       str_free(s);
       s->ptr = new_ptr;
