@@ -71,7 +71,7 @@ int main()
     if (1)
     { // str_to_long_cstyle(), str_bin(), str_hex(), str_bin(), str_dec(), ...
       long li;
-			str_t s, q, w;
+      str_t s, q, w;
 
       s = str_cstr("0xDEADBEEF");
       li = str_to_long_cstyle(&s, 321, 10);
@@ -105,7 +105,7 @@ int main()
       print_ok(str_is_equal(&q, &s));
       str_free(&s);
       str_free(&q);
-			
+      
       s = str_cstr("01234567");
       li = str_to_long_cstyle(&s, 321, 2);
       printf("str_to_long_cstyle('01234567') = '0%lo'", li);
@@ -115,7 +115,7 @@ int main()
       print_ok(str_is_equal(&q, &s));
       str_free(&s);
       str_free(&q);
-			
+      
       s = str_cstr("1111100110101");
       li = str_to_long_cstyle(&s, 0xF0F0, 2);
       q  = str_bin((unsigned long) li, 13);
@@ -128,13 +128,13 @@ int main()
       li = str_to_long_cstyle(&s, 0xF0F0, 8);
       q  = str_bin((unsigned long) li, 32);
       printf("str_to_long_cstyle('0b10100110001110000111100000111110') = '%s'",
-				     str_c(&q));
+             str_c(&q));
       str_delete(&s, 0, 2); // delete "0b" 
       print_ok(str_is_equal(&s, &q));
       str_free(&s);
       str_free(&q);
     }
-
+    
     if (1)
     { // str_int(), str_c()
       str_t s;
@@ -188,12 +188,12 @@ int main()
       str_t s1 = str_int(123);
       str_t s2 = str_cstr("456");
       str_t s3 = str_sum("fSsScisdcx", 1., &s1, "+", &s2, '=', 1579, " :-) ",
-			 3.14, ' ', 0xDEADBEEF);
+                         3.14, ' ', 0xDEADBEEF);
       
       printf("str_sum(...) = '%s'", str_c(&s3));
       str_swap(&s1, &s3);
       print_ok(str_is_equal_cstr(&s1,
-	       "1123+456=1579 :-) 3.1400000000000001 DEADBEEF"));
+               "1123+456=1579 :-) 3.1400000000000001 DEADBEEF"));
       print_ok(str_is_equal_cstr(&s3, "123"));
       
       str_free(&s1);
