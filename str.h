@@ -2,7 +2,7 @@
  * Project: C string type
  * Version: 0.2b
  * File: "str.h"
- * (C) 2007-2015 Alex Zorg <azorg@mail.com>,
+ * (C) 2007-2015 Alex Zorg <azorg@mail.com>
  * Licensed by GNU General Public License version 2
  */
 
@@ -154,11 +154,11 @@ STR_INLINE void* _str_malloc_mem(int size)
 #if defined(STR_DEBUG) || defined(STR_EXCEPTION_STRING) 
   if (ptr != (void*) NULL)
   {
-#ifdef STR_DEBUG
+#  ifdef STR_DEBUG
     _str_malloc_num++;
-#endif // STR_DEBUG
+#  endif // STR_DEBUG
   }
-#ifdef STR_EXCEPTION_STRING
+#  ifdef STR_EXCEPTION_STRING
   else
     fprintf(stderr, _str_exstr, size); // show exception
 #  endif // STR_EXCEPTION_STRING

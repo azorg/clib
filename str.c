@@ -2,7 +2,7 @@
  * Project: C string type
  * Version: 0.2b
  * File: "str.c"
- * (C) 2007-2015 Alex Zorg <azorg@mail.ru>,
+ * (C) 2007-2015 Alex Zorg <azorg@mail.ru>
  * Licensed by GNU General Public License version 2
  */
 

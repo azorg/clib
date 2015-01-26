@@ -69,7 +69,74 @@ int main()
 #endif
 
     if (1)
-    { // str_int(), str_c(), 
+    { // str_to_long_cstyle(), str_bin(), str_hex(), str_bin(), str_dec(), ...
+      long li;
+			str_t s, q, w;
+
+      s = str_cstr("0xDEADBEEF");
+      li = str_to_long_cstyle(&s, 321, 10);
+      printf("str_to_long_cstyle('0xDEADBEEF') = '%lX'", li);
+      print_ok(li == 0xDEADBEEF);
+      q = str_hex((unsigned long) li, 8);
+      printf("str_hex(0x%lX) = '%s'", li, str_c(&q));
+      str_delete(&s, 0, 2); // delete "0x" 
+      print_ok(str_is_equal(&s, &q));
+      str_free(&s);
+      str_free(&q);
+      
+      s = str_cstr("BedaBeda");
+      li = str_to_long_cstyle(&s, 321, 16);
+      printf("str_to_long_cstyle('BedaBeda') = '%lX'", li);
+      print_ok(li == 0xBEDABEDA);
+      q = str_hex((unsigned long) li, 8);
+      printf("str_hex(0x%lX) = '%s'", li, str_c(&q));
+      w = str_upper_case(&s);
+      print_ok(str_is_equal(&q, &w));
+      str_free(&w);
+      str_free(&s);
+      str_free(&q);
+
+      s = str_cstr("123456789");
+      li = str_to_long_cstyle(&s, 321, 10);
+      printf("str_to_long_cstyle('123456789') = '%li'", li);
+      print_ok(li == 123456789);
+      q = str_dec((unsigned long) li, 9);
+      printf("str_dec(%li) = '%s'", li, str_c(&q));
+      print_ok(str_is_equal(&q, &s));
+      str_free(&s);
+      str_free(&q);
+			
+      s = str_cstr("01234567");
+      li = str_to_long_cstyle(&s, 321, 2);
+      printf("str_to_long_cstyle('01234567') = '0%lo'", li);
+      print_ok(li == 01234567);
+      q = str_oct((unsigned long) li, 8);
+      printf("str_oct(0%lo) = '%s'", li, str_c(&q));
+      print_ok(str_is_equal(&q, &s));
+      str_free(&s);
+      str_free(&q);
+			
+      s = str_cstr("1111100110101");
+      li = str_to_long_cstyle(&s, 0xF0F0, 2);
+      q  = str_bin((unsigned long) li, 13);
+      printf("str_to_long_cstyle('1111100110101', 2) = '%s'", str_c(&q));
+      print_ok(str_is_equal(&s, &q));
+      str_free(&s);
+      str_free(&q);
+      
+      s = str_cstr("0b10100110001110000111100000111110");
+      li = str_to_long_cstyle(&s, 0xF0F0, 8);
+      q  = str_bin((unsigned long) li, 32);
+      printf("str_to_long_cstyle('0b10100110001110000111100000111110') = '%s'",
+				     str_c(&q));
+      str_delete(&s, 0, 2); // delete "0b" 
+      print_ok(str_is_equal(&s, &q));
+      str_free(&s);
+      str_free(&q);
+    }
+
+	if (1)
+    { // str_int(), str_c()
       str_t s;
       s = str_int(12345);
       printf("str_int(12345) = '%s'", str_c(&s));
