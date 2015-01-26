@@ -34,8 +34,8 @@ int main()
       *str_at(&section, 1) = '0' + i;
       for (j = 0; j < 3; j++)
       {
-	char value[3];
-	str_t ident = str_cstr("i ");
+        char value[3];
+        str_t ident = str_cstr("i ");
 
         value[0] = '0' + i;
         value[1] = '0' + j;
@@ -44,7 +44,7 @@ int main()
         *str_at(&ident, 1) = '0' + j;
         ini_write_value(&f, str_c(&section), str_c(&ident), value);
         
-	str_free(&ident);
+        str_free(&ident);
       }
       str_free(&section);
     }
@@ -104,32 +104,32 @@ int main()
       *str_at(&section, 1) = '0' + i;
       for (j = 0; j < 3; j++)
       {
-	int a_i;
-	float a_f;
-	double a_d;
-	char value[3];
-	str_t ident = str_cstr("i ");
+        int a_i;
+        float a_f;
+        double a_d;
+        char value[3];
+        str_t ident = str_cstr("i ");
         value[0] = '0' + i;
         value[1] = '0' + j;
         value[2] = 0;
 
         *str_at(&ident, 1) = '0' + j;
-	v = ini_read_value(&f, str_c(&section), str_c(&ident), "???");
-	a_i = ini_read_long(&f, str_c(&section), str_c(&ident), 999);
-	a_f = ini_read_float(&f, str_c(&section), str_c(&ident), 999);
-	a_d = ini_read_double(&f, str_c(&section), str_c(&ident), 999);
-	//printf("[%s]: %s = '%s'\n", str_c(&section), str_c(&ident), str_c(&v));
-	//printf("[%s]: %s = '%i'\n", str_c(&section), str_c(&ident), a);
+        v = ini_read_value(&f, str_c(&section), str_c(&ident), "???");
+        a_i = ini_read_long(&f, str_c(&section), str_c(&ident), 999);
+        a_f = ini_read_float(&f, str_c(&section), str_c(&ident), 999);
+        a_d = ini_read_double(&f, str_c(&section), str_c(&ident), 999);
+        //printf("[%s]: %s = '%s'\n", str_c(&section), str_c(&ident), str_c(&v));
+        //printf("[%s]: %s = '%i'\n", str_c(&section), str_c(&ident), a);
         
-	// compare
-	if (!str_is_equal_cstr(&v, value) || \
-	    a_i != (i * 10 + j) || a_d != a_f || a_i != a_f)
-	{ // error
+        // compare
+        if (!str_is_equal_cstr(&v, value) || \
+            a_i != (i * 10 + j) || a_d != a_f || a_i != a_f)
+        { // error
           g_err++;
-	}
+        }
 
-	str_free(&v);
-	str_free(&ident);
+        str_free(&v);
+        str_free(&ident);
       }
       str_free(&section);
     }
@@ -199,22 +199,22 @@ int main()
       *str_at(&section, 1) = '0' + i;
       for (j = 1; j <= 2; j++)
       {
-	int a;
-	str_t ident = str_cstr("a ");
+        int a;
+        str_t ident = str_cstr("a ");
 
         *str_at(&ident, 1) = '0' + j;
-	a = ini_read_long(&f, str_c(&section), str_c(&ident), 999);
-	//printf("[%s]: %s = '%i'\n", str_c(&section), str_c(&ident), a);
+        a = ini_read_long(&f, str_c(&section), str_c(&ident), 999);
+        //printf("[%s]: %s = '%i'\n", str_c(&section), str_c(&ident), a);
         
-	// compare
-	if (a != (i * 10 + j))
-	{ // error
-	  printf("error in ini_load() ([%s]: %s = '%i')\n", str_c(&section), str_c(&ident), a);
-	  err++;
+        // compare
+        if (a != (i * 10 + j))
+        { // error
+          printf("error in ini_load() ([%s]: %s = '%i')\n", str_c(&section), str_c(&ident), a);
+          err++;
           g_err++;
-	}
+        }
 
-	str_free(&ident);
+        str_free(&ident);
       }
       str_free(&section);
     }

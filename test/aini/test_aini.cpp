@@ -30,8 +30,8 @@ int main()
       section[1] = '0' + i;
       for (j = 0; j < 3; j++)
       {
-	char value[3];
-	std::string ident = "i ";
+        char value[3];
+        std::string ident = "i ";
 
         value[0] = '0' + i;
         value[1] = '0' + j;
@@ -92,30 +92,30 @@ int main()
       section[1] = '0' + i;
       for (j = 0; j < 3; j++)
       {
-	int a_i;
-	float a_f;
-	double a_d;
-	char value[3];
-	std::string ident = "i ";
+        int a_i;
+        float a_f;
+        double a_d;
+        char value[3];
+        std::string ident = "i ";
         value[0] = '0' + i;
         value[1] = '0' + j;
         value[2] = 0;
 
         ident[1] = '0' + j;
-	v = f.read_value(section, ident, "???");
-	a_i = f.read_long(section, ident, 999);
-	a_f = f.read_float(section, ident, 999);
-	a_d = f.read_double(section, ident, 999);
-	//printf("[%s]: %s = '%s'\n", section.c_str(), ident.c_str(), v.c_str());
-	//printf("[%s]: %s = '%i'\n", section.c_str(), ident.c_str(), a);
+        v = f.read_value(section, ident, "???");
+        a_i = f.read_long(section, ident, 999);
+        a_f = f.read_float(section, ident, 999);
+        a_d = f.read_double(section, ident, 999);
+        //printf("[%s]: %s = '%s'\n", section.c_str(), ident.c_str(), v.c_str());
+        //printf("[%s]: %s = '%i'\n", section.c_str(), ident.c_str(), a);
         
-	// compare
-	if (v != value || \
-	    a_i != (i * 10 + j) || a_d != a_f || a_i != a_f)
-	{ // error
+        // compare
+        if (v != value || \
+            a_i != (i * 10 + j) || a_d != a_f || a_i != a_f)
+        { // error
           printf("error in read matrix ('%s')\n", v.c_str());
           g_err++;
-	}
+        }
       }
     }
     
@@ -186,21 +186,21 @@ int main()
       section[1] = '0' + i;
       for (j = 1; j <= 2; j++)
       {
-	int a;
-	std::string ident = "a ";
+        int a;
+        std::string ident = "a ";
 
         ident[1] = '0' + j;
-	a = f.read_long(section, ident, 999);
-	//printf("[%s]: %s = '%i'\n", section.c_str(), ident.c_str(), a);
+        a = f.read_long(section, ident, 999);
+        //printf("[%s]: %s = '%i'\n", section.c_str(), ident.c_str(), a);
         
-	// compare
-	if (a != (i * 10 + j))
-	{ // error
-	  printf("error in ini_load() ([%s]: %s = '%i')\n",
-	         section.c_str(), ident.c_str(), a);
-	  err++;
+        // compare
+        if (a != (i * 10 + j))
+        { // error
+          printf("error in ini_load() ([%s]: %s = '%i')\n",
+                 section.c_str(), ident.c_str(), a);
+          err++;
           g_err++;
-	}
+        }
       }
     }
     
