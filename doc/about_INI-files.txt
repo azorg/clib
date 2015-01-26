@@ -1,0 +1,58 @@
+ini.h/ini.c - is an simple C99 module for parsing (read and write) INI-files.
+The format is similar to that seen in Microsoft *.ini files but the
+implementation is independent.
+
+This labrary depend from str.h/str.c module only.
+`str_t` type using for return ASCIZ dynamic string.
+Pointer to standart ASCIZ string may be received by str_c() function.
+After using `str_t` variable you must call str_free() function for free memory.
+
+The INI-files are separated into sections, where the section names are
+written inside square brackets. If you don't wish to use sections then
+pass a empty string for the section name (like "").
+
+Under each section are a set of key-value pairs, separated by an equals sign.
+Equals sign may be: '=', ':=' or ':'. First time for write uses '='.
+ 
+Spaces around keys and values are ignored.
+Whitespace inside the value string is preserved;
+
+If multiple entries for the same key exist inside the
+selected section (if using) then only the first value is used. If
+a section is defined more than once only the first is used. The INI-file
+can contain comments, which begin with a semicolon (;) or hash (#).
+
+Example INI-file format:
+--------------------------------------------------------------
+; Semi-colon comment
+[network]
+mac = 01:23:45:67:89:AB
+
+# hash comment, leading spaces below
+ gateway = 192.168.1.1
+
+# extraneous spaces before and after key and value
+ ip   =   192.168.1.2             
+
+hosts_allow := example.com
+
+# A similarly-named section
+[network2]
+mac         : ee:ee:ee:ee:ee:ee
+subnet mask : 255.255.255.0
+
+; Extra whitespace around the key and value is permitted
+; (and ignored)
+  hosts_allow =    sloppy.example.com  
+
+[misc]
+string  = 123456789012345678901234567890123456789001234567890
+string2 = a string with spaces in it
+string3 = "   Aaaa!   "
+
+; This section is a repeat of en existing section and will be ignored.
+[network]
+mac := 01:23:45:67:89:ab
+ip  := 192.168.1.2
+
+--------------------------------------------------------------

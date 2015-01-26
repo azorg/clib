@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------
 #include "ini.h"
 //---------------------------------------------------------------------------
-static STR_BOOL ini_open_rd(ini_t *f) // if OK return 1, else 0
+static STR_BOOL _ini_open_rd(ini_t *f) // if OK return 1, else 0
 {
   if (f->state == INI_CLOSE)
   { // file is not at memory yet (f->data is empty)
@@ -22,11 +22,11 @@ static STR_BOOL ini_open_rd(ini_t *f) // if OK return 1, else 0
   return STR_BOOL_TRUE; // read from file successful
 }
 //---------------------------------------------------------------------------
-static void ini_open_wr(ini_t *f)
+static void _ini_open_wr(ini_t *f)
 {
   if (f->state != INI_WRITE)
   { // file is not modified
-    ini_open_rd(f); // read file to memory if needed
+    _ini_open_rd(f); // read file to memory if needed
     f->state = INI_WRITE;
   }
 }
@@ -74,7 +74,7 @@ void ini_set_fname(ini_t *f, const char *fname)
   str_assign_cstr(&f->fname, fname);
 }
 //---------------------------------------------------------------------------
-static int ini_find_section(const ini_t *f, const char *section)
+static int _ini_find_section(const ini_t *f, const char *section)
 {
   int i, j;
   str_t h, h1, h2, h3;
@@ -132,7 +132,7 @@ static int ini_find_section(const ini_t *f, const char *section)
   return i; // return index of section data or -1
 }
 //---------------------------------------------------------------------------
-static int ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
+static int _ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
 {
   int j;
   str_t h, h1, h2;
@@ -153,9 +153,9 @@ static int ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
     if (i == -1 || *str_at(&f->data, i) == INI_LBR)
       break; // can't find ident
     j = str_find_one_of(
-        &f->data,
-        INI_SP_LIST INI_EQ_LIST INI_LR_LIST INI_COM,
-	i + 1, 0, -1);
+          &f->data,
+          INI_EQ_LIST INI_LR_LIST INI_COM, // remove INI_SP by 2015.01.26
+	  i + 1, 0, -1);
     if (j == -1) j = str_size(&f->data);
     
     h1 = str_substr(&f->data, i, j - i);
@@ -176,7 +176,7 @@ static int ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
   return -1; // ident not found
 }
 //---------------------------------------------------------------------------
-static int ini_add_section(ini_t *f, const char *section)
+static int _ini_add_section(ini_t *f, const char *section)
 {
   str_t h, h1;
   
@@ -202,10 +202,10 @@ static int ini_add_section(ini_t *f, const char *section)
 // check section
 STR_BOOL ini_has_section(ini_t *f, const char *section)
 {
-  if (!ini_open_rd(f))
+  if (!_ini_open_rd(f))
     return STR_BOOL_FALSE; // can't open file
 
-  if (ini_find_section(f, section) < 0)
+  if (_ini_find_section(f, section) < 0)
     return STR_BOOL_FALSE; // can't find section
 
   return STR_BOOL_TRUE; // section exist
@@ -216,14 +216,14 @@ STR_BOOL ini_has_ident(ini_t *f, const char *section, const char *ident)
 {
   int i, end;
 
-  if (!ini_open_rd(f))
+  if (!_ini_open_rd(f))
     return STR_BOOL_FALSE; // can't open file
   
-  i = ini_find_section(f, section);
+  i = _ini_find_section(f, section);
   if (i < 0)
     return STR_BOOL_FALSE; // can't find section
 
-  i = ini_find_ident(f, ident, i, &end);
+  i = _ini_find_ident(f, ident, i, &end);
   if (i == -1)
     return STR_BOOL_FALSE; // can't find ident
   
@@ -237,11 +237,11 @@ str_t ini_read_value(ini_t *f,
   int i, j;
   str_t h, h1;
 
-  if (!ini_open_rd(f))
+  if (!_ini_open_rd(f))
     goto return_default_value; // can't open file
   
   // find section
-  i = ini_find_section(f, section);
+  i = _ini_find_section(f, section);
   
   if (i == str_size(&f->data))
     goto return_default_value; // last empty section
@@ -250,7 +250,7 @@ str_t ini_read_value(ini_t *f,
     goto return_default_value; // can't find section
 
   // find ident
-  i = ini_find_ident(f, ident, i, &j);
+  i = _ini_find_ident(f, ident, i, &j);
 
   if (i == -1)
     goto return_default_value; // can't find ident
@@ -279,7 +279,7 @@ void ini_write_value(ini_t *f,
   str_t val, id, h;
 
   // open to write
-  ini_open_wr(f);
+  _ini_open_wr(f);
 
   // trim value
   h = str_cstr(value);
@@ -287,7 +287,7 @@ void ini_write_value(ini_t *f,
   str_free(&h);
 
   // find section
-  i = ini_find_section(f, section);
+  i = _ini_find_section(f, section);
   
   if (i == str_size(&f->data) && i != 0)
   { // last empty section => add '\n' to end of file
@@ -295,10 +295,10 @@ void ini_write_value(ini_t *f,
     i = str_size(&f->data) - 1;
   }
   else if (i == -1)
-    i = ini_add_section(f, section); // can't find section => add section
+    i = _ini_add_section(f, section); // can't find section => add section
 
   // find ident
-  i = ini_find_ident(f, ident, i, &j);
+  i = _ini_find_ident(f, ident, i, &j);
   
   if (i == -1)
   { // can't find ident => add string ("ident=value\n")
