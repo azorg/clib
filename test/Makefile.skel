@@ -1,24 +1,26 @@
 #============================================================================
 # Skeleton for GNU Make
-# Version: 0.6.0
+# Version: 0.7.0
 # File: "Makefile.skel"
-# (C) 2005...2010 Alex Zorg <azorg@mail.ru>
+# (C) 2005...2015 Alex Zorg <azorg@mail.ru>
 # Licensed by GNU General Public License version 2
-# Last update: 2010.11.08
+# Last update: 2015.01.26
 #============================================================================
 # -*= Makefile example =*-
 #OUT_NAME    := hello
 #EXEC_EXT    := .exe
 #OUT_DIR     := .
 #CLEAN_DIR   := $(OUT_DIR)
-#CLEAN_FILES := "$(OUT_DIR)/$(OUT_NAME).map"
+#CLEAN_FILES := "$(OUT_DIR)/$(OUT_NAME).map" "$(OUT_DIR)/$(OUT_NAME).exe"
 #----------------------------------------------------------------------------
 #
 # 1-st way to select source files
 #SRCS := main.cpp libs/src/support.c asm_func.s
+#HDRS := libs/include/support.h asm_func.h my_types.h
 #
 # 2-nd way to select source files
 #SRC_DIRS := . libs/src
+#HDR_DIRS := . libs/include
 #
 #----------------------------------------------------------------------------
 #DEFS      := -DUNIT_DEBUG
@@ -62,6 +64,20 @@ else
   SRCS := $(wildcard $(SRC_WILDCARDS))
 endif
 #----------------------------------------------------------------------------
+ifdef HDRS
+  # 1-st way to select header files
+  HDR_DIRS := $(patsubst %/,%,$(sort $(dir $(HDRS))))
+else
+  # 2-nd way to select header files
+  ifndef HDR_DIRS
+    HDR_DIRS = .
+  endif
+  HDR_WILDCARDS := $(addsuffix /*.h,   $(HDR_DIRS)) \
+                   $(addsuffix /*.hh,  $(HDR_DIRS)) \
+                   $(addsuffix /*.hpp, $(HDR_DIRS))
+  HDRS := $(wildcard $(HDR_WILDCARDS))
+endif
+#----------------------------------------------------------------------------
 ifndef DEPS_DIR
   DEPS_DIR := .dep
 endif
@@ -80,7 +96,7 @@ OUT := $(OUT_DIR)/$(OUT_NAME)$(EXEC_EXT)
 #override CFLAGS   +=
 #override CXXFLAGS +=
 #override LDFLAGS  +=
-override INC_FLAGS += $(addprefix -I, $(SRC_DIRS) $(INC_DIRS))
+override INC_FLAGS += $(addprefix -I, $(SRC_DIRS) $(INC_DIRS) $(HDR_DIRS))
 #----------------------------------------------------------------------------
 ifndef _AS
   _AS := @as
@@ -137,6 +153,7 @@ RMDIR := @rm -rf
 MKDIR := @mkdir -p
 ECHO  := @echo
 CAT   := @cat
+WC    := @wc
 SHELL := sh
 #----------------------------------------------------------------------------
 BASE_SRCS := $(notdir $(basename $(SRCS)))
@@ -204,8 +221,17 @@ rebuild:
 	make clean
 	make all
 
-srclist:
-	$(ECHO) $(SRCS)
+list:
+	$(ECHO) SRCS: $(SRCS)
+	$(ECHO) HDRS: $(HDRS)
+
+dirs:
+	$(ECHO) SRC_DIRS: $(SRC_DIRS)
+	$(ECHO) HDR_DIRS: $(HDR_DIRS)
+	$(ECHO) INC_DIRS: $(INC_DIRS)
+
+count:
+	$(WC) $(HDRS) $(SRCS)
 
 tags: $(TAGS_FILE)
 #----------------------------------------------------------------------------

@@ -4,11 +4,14 @@ OUT_DIR      := .
 CLEAN_FILES := test_file?.txt "$(OUT_DIR)/$(OUT_NAME).exe"
 
 # 1-st way to select source files
-#SRC_DIRS := .
+#SRC_DIRS := ../.. .
+#HDR_DIRS := ../..
 
 # 2-nd way to select source files
 SRCS := ../../str.c \
         test_str.c
+
+HDRS := ../../str.h
 
 DEFS    := -DSTR_DEBUG -DSTR_DEBUG_EXTRA -DSTR_DEF_SECTOR_SIZE="7"
 #-DSTR_INLINE="static inline"

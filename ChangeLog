@@ -4,6 +4,7 @@ ChangeLog of simple C/C++ library "clib"
  * changed
 
 2015.01.26
+ * upgrade Makefiles and Makefile.skel
  * midify unit test `str_t` (str_hex(), str_to_long_cstyle(), ...)
  * test `str_t` under Visual Studio / MinGW and fix bugs (near vsnprintf() again)
  * fix some bugs with int64
