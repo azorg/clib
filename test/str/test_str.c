@@ -135,7 +135,7 @@ int main()
       str_free(&q);
     }
 
-	if (1)
+    if (1)
     { // str_int(), str_c()
       str_t s;
       s = str_int(12345);
