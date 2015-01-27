@@ -46,14 +46,14 @@
 #ifdef STR_INT64
 //#  include <inttypes.h>
 // int64 printf() formats:
-#  if 1 // Linux FIXME
-#    define STR_PRId64 "lld"
-#    define STR_PRIu64 "llu"
-#    define STR_PRIx64 "llX"
-#  else // MinGW
+#  ifdef __MINGW32__ // MinGW32, MinGW-w64
 #    define STR_PRId64 "I64d"
 #    define STR_PRIu64 "I64u"
 #    define STR_PRIx64 "I64X"
+#  else // Linux, Visual C++
+#    define STR_PRId64 "lld"
+#    define STR_PRIu64 "llu"
+#    define STR_PRIx64 "llX"
 #  endif
 #endif // STR_INT64
 
