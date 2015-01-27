@@ -2,7 +2,7 @@
 *.o
 .dep
 .obj
-ini_test
-str_test
-aini_test
+test_str
+test_ini
+test_aini
 
