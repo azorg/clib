@@ -35,16 +35,17 @@
 //#define STR_DEBUG
 //#define STR_DEBUG_EXTRA
 
-// if type 'int64' exist
-#define STR_INT64  long long
-#define STR_UINT64 unsigned long long
-//#define STR_INT64   __int64
-//#define STR_UINT64 __uint64
-//#define STR_INT64   int64_t
-//#define STR_UINT64 uint64_t
+// if type 'int64' defined
+#define STR_INT64_DEF
 
-#ifdef STR_INT64
-//#  include <inttypes.h>
+#ifdef STR_INT64_DEF
+#  include <inttypes.h> // int64_t, uint64_t
+#  include <stdlib.h>   // int64_t, uint64_t under Linux
+typedef int64_t  STR_INT64;
+typedef uint64_t STR_UINT64;
+//typedef __int64  STR_INT64;
+//typedef __uint64 STR_UINT64;
+
 // int64 printf() formats:
 #  ifdef __MINGW32__ // MinGW32, MinGW-w64
 #    define STR_PRId64 "I64d"
@@ -55,7 +56,7 @@
 #    define STR_PRIu64 "llu"
 #    define STR_PRIx64 "llX"
 #  endif
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 
 // include some extra function
 #define STR_EXTRA
@@ -272,16 +273,16 @@ STR_INLINE void str_init_long(str_t *s, long src)
 STR_INLINE void str_init_ulong(str_t *s, unsigned long src)
 { str_init_sprintf(s, "%lu", src); }
 //---------------------------------------------------------------------------
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
 STR_INLINE void str_init_int64(str_t *s, STR_INT64 src)
 { str_init_sprintf(s, "%" STR_PRId64, src); }
 //---------------------------------------------------------------------------
 STR_INLINE void str_init_uint64(str_t *s, STR_UINT64 src)
 { str_init_sprintf(s, "%" STR_PRIu64, src); }
 //---------------------------------------------------------------------------
-STR_INLINE void str_init_int64_hex(str_t *s, STR_INT64 src)
+STR_INLINE void str_init_uint64_hex(str_t *s, STR_UINT64 src)
 { str_init_sprintf(s, "%" STR_PRIx64, src); }
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 //---------------------------------------------------------------------------
 #ifdef STR_FLOAT
 STR_INLINE void str_init_float(str_t *s, float src)
@@ -333,16 +334,16 @@ STR_INLINE str_t str_long(long src)
 STR_INLINE str_t str_ulong(unsigned long src)
 { str_t s; str_init_ulong(&s, src); return s; }
 //---------------------------------------------------------------------------
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
 STR_INLINE str_t str_int64(STR_INT64 src)
 { str_t s; str_init_int64(&s, src); return s; }
 //---------------------------------------------------------------------------
 STR_INLINE str_t str_uint64(STR_UINT64 src)
 { str_t s; str_init_uint64(&s, src); return s; }
 //---------------------------------------------------------------------------
-STR_INLINE str_t str_int64_hex(STR_INT64 src)
-{ str_t s; str_init_int64_hex(&s, src); return s; }
-#endif // STR_INT64
+STR_INLINE str_t str_uint64_hex(STR_UINT64 src)
+{ str_t s; str_init_uint64_hex(&s, src); return s; }
+#endif // STR_INT64_DEF
 //---------------------------------------------------------------------------
 #ifdef STR_FLOAT
 STR_INLINE str_t str_float(float src)
@@ -368,9 +369,9 @@ STR_BOOL str_is_equal_cstr(const str_t *s1, const char *s2);
 // transformations
 long str_to_long_cstyle(const str_t *s, long def_val, unsigned char base);
 //---------------------------------------------------------------------------
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
 STR_INT64 str_to_int64(const str_t *s, STR_INT64 def_val, unsigned char base);
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 //---------------------------------------------------------------------------
 long str_to_long_ex(const str_t *s, long def_val, unsigned char base);
 //---------------------------------------------------------------------------
@@ -410,7 +411,7 @@ void str_add_char(str_t *s, char add);
 //---------------------------------------------------------------------------
 // concatenation
 // fmt: S - str_t*, s - char*, c - char, i - int, u - uint, x - hex,
-//      f - float, d - double, I - int64, U - uint64, X - int64-HEX, ...
+//      f - float, d - double, I - int64, U - uint64, X - uint64-HEX, ...
 str_t str_sum(const char *fmt, ...);
 //---------------------------------------------------------------------------
 // vsprintf-like concatenation

@@ -237,7 +237,7 @@ int main()
       printf("ini_load() [ok]\n");
   }
 
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
   if (1)
   {
      ini_t f;
@@ -280,7 +280,7 @@ int main()
      ini_free(&f);
   }
 #endif // STR_EXTRA
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 
   if (1)
   {

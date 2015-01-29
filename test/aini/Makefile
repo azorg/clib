@@ -16,12 +16,17 @@ HDRS := ../../str.h \
         ../../ini.h \
         ../../aini.h
 
-DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3"
-#-DINI_INLINE="static inline"
+DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3" 
+
+#           -D__USE_MINGW_ANSI_STDIO 1
+#           -DINI_INLINE="static inline"
+
 OPT     := -Os -fomit-frame-pointer
-CFLAGS   := $(DEFS) $(OPT) -pipe -Wall
-CXXFLAGS := $(DEFS) $(OPT) -pipe -Wall
-LDFLAGS  :=
+WARN    := -Wall
+
+CFLAGS   := $(DEFS) $(OPT) -pipe $(WARN)
+CXXFLAGS := $(DEFS) $(OPT) -pipe $(WARN) $(CXXFLAGS)
+LDFLAGS  := -lm
 
 #_CC  := @gcc
 #_CXX := @g++
@@ -32,4 +37,3 @@ _LD  := @g++
 #----------------------------------------------------------------------------
 include ../Makefile.skel
 #----------------------------------------------------------------------------
-

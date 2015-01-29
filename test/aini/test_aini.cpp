@@ -2,7 +2,6 @@
  * Unit test of `aclass::aini` class
  */
 
-
 #include <math.h>
 #include "aini.h"
 
@@ -221,7 +220,7 @@ int main()
       printf("ini_load() [ok]\n");
   }
 
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
   if (1)
   {
      aclass::aini f;
@@ -233,7 +232,8 @@ int main()
      i = f.read_int64("int64", "i64", 123);
      if (i != j)
      {
-       printf("error in int64: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, j);
+       printf("error in int64: %" STR_PRIx64 " != %" STR_PRIx64 "\n",
+              (STR_UINT64) i, (STR_UINT64) j);
        g_err++;
      }
      else
@@ -254,14 +254,15 @@ int main()
      pi = (STR_INT64 *) bin.c_str();
      if (i != *pi)
      {
-       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, *pi);
+       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n",
+              (STR_UINT64) i, (STR_UINT64) *pi);
        g_err++;
      }
      else
        printf("read/write bin [ok]\n");
   }
 #endif // STR_EXTRA
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 
   if (1)
   {

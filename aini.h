@@ -227,7 +227,7 @@ public:
     ini_write_long(&f, section.c_str(), ident.c_str(), value);
   }
 
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
   // read value as int64 (HEX format)
   inline STR_INT64 read_int64(const char *section,
                               const char *ident,
@@ -255,7 +255,7 @@ public:
   {
     ini_write_int64(&f, section.c_str(), ident.c_str(), value);
   }
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 
 #ifdef STR_FLOAT
   // read value as float

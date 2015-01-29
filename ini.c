@@ -515,13 +515,13 @@ void ini_write_long(ini_t *f,
   str_free(&val);
 }
 //---------------------------------------------------------------------------
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
 // read and write value as int64
 STR_INT64 ini_read_int64(ini_t *f,
                          const char *section, const char *ident,
                          STR_INT64 default_value)
 {
-  str_t def = str_int64_hex(default_value);
+  str_t def = str_uint64_hex((STR_UINT64) default_value);
   str_t val = ini_read_value(f, section, ident, str_c(&def)); 
   STR_INT64 retv = str_size(&val) ?
                    str_to_int64(&val, default_value, 16) : default_value;
@@ -534,11 +534,11 @@ void ini_write_int64(ini_t *f,
                      const char *section, const char *ident,
                      STR_INT64 value)
 {
-  str_t val = str_int64_hex(value);
+  str_t val = str_uint64_hex((STR_UINT64) value);
   ini_write_value(f, section, ident, str_c(&val)); 
   str_free(&val);
 }
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 //---------------------------------------------------------------------------
 #ifdef STR_FLOAT
 float ini_read_float(ini_t *f,

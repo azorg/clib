@@ -1,10 +1,10 @@
 #============================================================================
 # Skeleton for GNU Make
-# Version: 0.7.0
+# Version: 0.7.1
 # File: "Makefile.skel"
 # (C) 2005...2015 Alex Zorg <azorg@mail.ru>
 # Licensed by GNU General Public License version 2
-# Last update: 2015.01.26
+# Last update: 2015.01.30
 #============================================================================
 # -*= Makefile example =*-
 #OUT_NAME    := hello
@@ -29,9 +29,10 @@
 #INC_FLAGS := -I/usr/include/foo -I `wx-config --cxxflags` $(DEFS)
 #
 #OPTIM     := -Os -fomit-frame-pointer
+#WARN      := -Wall
 #
 #ASFLAGS   := -mcpu=cortex-m3 -mthumb $(ASFLAGS)
-#CFLAGS    :=  -Wall -pipe $(OPTIM) $(DEFS) $(CFLAGS)
+#CFLAGS    := $(WARN) -pipe $(OPTIM) $(DEFS) $(CFLAGS)
 #CXXFLAGS  := `wx-config --cxxflags` $(CFLAGS) $(CXXFLAGS)
 #LDFLAGS   := `wx-config --libs` -lm -lrt -lpthread $(LDFLAGS)
 #----------------------------------------------------------------------------

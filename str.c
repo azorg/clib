@@ -331,7 +331,7 @@ err:
   return def_val;
 }
 //---------------------------------------------------------------------------
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
 STR_INT64 str_to_int64(const str_t *s, STR_INT64 def_val, unsigned char base)
 {
   unsigned int i;
@@ -362,7 +362,7 @@ err:
   str_free(&t);
   return def_val;
 }
-#endif // STR_INT64
+#endif // STR_INT64_DEF
 //---------------------------------------------------------------------------
 long str_to_long_ex(const str_t *s, long def_val, unsigned char base)
 {
@@ -538,7 +538,7 @@ void str_add_char(str_t *s, char add)
 //---------------------------------------------------------------------------
 // concatenation
 // fmt: S - str_t*, s - char*, c - char, i - int, i - uint, x - hex
-//      f - float, d - double, I - int64, U - uint64, X - int64-HEX, ...
+//      f - float, d - double, I - int64, U - uint64, X - uint64-HEX, ...
 str_t str_sum(const char *fmt, ...)
 {
   va_list ap;
@@ -577,14 +577,14 @@ str_t str_sum(const char *fmt, ...)
 	str_init_uint(p, va_arg(ap, unsigned int));
       else if (c == 'x')
 	str_init_int_hex(p, va_arg(ap, int));
-#ifdef STR_INT64
+#ifdef STR_INT64_DEF
       else if (c == 'I')
 	str_init_int64(p, va_arg(ap, STR_INT64));
       else if (c == 'U')
-	str_init_uint64(p, va_arg(ap, unsigned STR_INT64));
+	str_init_uint64(p, va_arg(ap, STR_UINT64));
       else if (c == 'X')
-	str_init_int64_hex(p, va_arg(ap, STR_INT64));
-#endif // STR_INT64
+	str_init_uint64_hex(p, va_arg(ap, STR_UINT64));
+#endif // STR_INT64_DEF
 #ifdef STR_FLOAT
       else if (c == 'f')
 	str_init_float(p, (float) va_arg(ap, double));
