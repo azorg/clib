@@ -1,6 +1,6 @@
 /*
  * Project: class "aini" (C++ binding for "ini_t")
- * Version: 0.1a
+ * Version: 0.2a
  * File: "aini.h"
  * (C) 2007-2015 Alex Zorg <azorg@mail.ru>
  * Licensed by GNU General Public License version 2
