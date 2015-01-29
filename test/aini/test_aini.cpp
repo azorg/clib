@@ -233,7 +233,7 @@ int main()
      if (i != j)
      {
        printf("error in int64: %" STR_PRIx64 " != %" STR_PRIx64 "\n",
-              (STR_UINT64) i, (STR_UINT64) j);
+              (long long unsigned) i, (long long unsigned) j);
        g_err++;
      }
      else
@@ -255,7 +255,7 @@ int main()
      if (i != *pi)
      {
        printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n",
-              (STR_UINT64) i, (STR_UINT64) *pi);
+              (long long unsigned) i, (long long unsigned) *pi);
        g_err++;
      }
      else
