@@ -2,7 +2,7 @@ OUT_NAME     := test_aini
 OUT_DIR      := .
 #INC_DIRS    :=
 CLEAN_FILES := "$(OUT_DIR)/$(OUT_NAME).exe"
-
+#----------------------------------------------------------------------------
 # 1-st way to select source files
 #SRC_DIRS := ../.. .
 #HDR_DIRS := ../..
@@ -15,18 +15,18 @@ SRCS := ../../str.c \
 HDRS := ../../str.h \
         ../../ini.h \
         ../../aini.h
-
+#----------------------------------------------------------------------------
 #INC_DIRS  := ../libs/include 
 #INC_FLAGS := -I/usr/include/foo
 DEFS     := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3" \
             -D__STDC_FORMAT_MACROS
-OPT      := -Os -fomit-frame-pointer
+OPTIM    := -Os -fomit-frame-pointer
 WARN     := -Wall
 
 CFLAGS    := $(WARN) $(OPTIM) $(DEFS) $(CFLAGS) -pipe
 CXXFLAGS  := $(CXXFLAGS) $(CFLAGS)
 LDFLAGS   := -lm $(LDFLAGS)
-
+#----------------------------------------------------------------------------
 #_CC  := @gcc
 #_CXX := @g++
 _LD  := @g++
