@@ -39,20 +39,30 @@
 #define STR_INT64_DEF
 
 #ifdef STR_INT64_DEF
-#  include <inttypes.h> // int64_t, uint64_t
-#  include <stdlib.h>   // int64_t, uint64_t under Linux
+#  include <inttypes.h> // PRI*64, int64_t, uint64_t (<stdint.h>)
 typedef int64_t  STR_INT64;
 typedef uint64_t STR_UINT64;
 //typedef __int64  STR_INT64;
 //typedef __uint64 STR_UINT64;
 
 // int64 printf() formats:
-#  ifdef __MINGW32__ // MinGW32, MinGW-w64
-#    define STR_PRId64 "I64d"
+#  if defined(PRIi64) // portable PRIi64, PRIu64, PRIX64 defined
+#    define STR_PRId64 PRIi64
+#    define STR_PRIu64 PRIu64
+#    define STR_PRIx64 PRIX64
+#  elif defined(__MINGW32__) // MinGW32 (MinGW-w64)
+#    warning "PRIi64 undefined, __MINGW32__ defined"
+#    define STR_PRId64 "I64i"
 #    define STR_PRIu64 "I64u"
 #    define STR_PRIx64 "I64X"
-#  else // Linux, Visual C++
-#    define STR_PRId64 "lld"
+#  elif defined(__BORLANDC__) // Borland C++ Builder
+#    warning "PRIi64 undefined, __BORLANDC__ defined"
+#    define STR_PRId64 "Li"
+#    define STR_PRIu64 "Lu"
+#    define STR_PRIx64 "LX"
+#  else
+#    warning "PRIi64 undefined"
+#    define STR_PRId64 "lli"
 #    define STR_PRIu64 "llu"
 #    define STR_PRIx64 "llX"
 #  endif

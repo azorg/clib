@@ -232,8 +232,7 @@ int main()
      i = f.read_int64("int64", "i64", 123);
      if (i != j)
      {
-       printf("error in int64: %" STR_PRIx64 " != %" STR_PRIx64 "\n",
-              (long long unsigned) i, (long long unsigned) j);
+       printf("error in int64: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, j);
        g_err++;
      }
      else
@@ -254,8 +253,7 @@ int main()
      pi = (STR_INT64 *) bin.c_str();
      if (i != *pi)
      {
-       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n",
-              (long long unsigned) i, (long long unsigned) *pi);
+       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, *pi);
        g_err++;
      }
      else

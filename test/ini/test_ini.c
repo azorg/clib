@@ -2,7 +2,6 @@
  * Unit test of `aini_t` component
  */
 
-
 #include <math.h>
 #include "str.h"
 #include "ini.h"
@@ -181,7 +180,7 @@ int main()
   { // "initile_t" - ini_load(...)
     int i, j;
     int err = 0;
-    char *str = 
+    const char *str = 
       "[s1] ; line 1\n"
       "a1=11 ; line 2\n"
       "a2=12 ; line 3\n"
@@ -249,8 +248,7 @@ int main()
      i = ini_read_int64(&f, "int64", "i64", 123);
      if (i != j)
      {
-       printf("error in int64: %" STR_PRIu64 " != %" STR_PRIu64 "\n",
-              (long long unsigned) i, (long long unsigned) j);
+       printf("error in int64: %" STR_PRIu64 " != %" STR_PRIu64 "\n", i,  j);
        g_err++;
      }
      else
@@ -272,8 +270,7 @@ int main()
      pi = (STR_INT64 *) str_c(&bin);
      if (i != *pi)
      {
-       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n",
-              (long long unsigned) i, (long long unsigned) *pi);
+       printf("error in bin: %" STR_PRIx64 " != %" STR_PRIx64 "\n", i, *pi);
        g_err++;
      }
      else

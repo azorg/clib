@@ -15,11 +15,14 @@ SRCS := ../../str.c \
 HDRS := ../../str.h \
 	      ../../ini.h
 
-DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="2"
-#-DINI_INLINE="static inline"
-OPT     := -Os -fomit-frame-pointer
-CFLAGS  := $(DEFS) $(OPT) -pipe -Wall
-LDFLAGS :=
+DEFS     := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="2" \
+            -D__STDC_FORMAT_MACROS
+OPT      := -Os -fomit-frame-pointer
+WARN     := -Wall
+
+CFLAGS   := $(WARN) $(OPTIM) $(DEFS) $(CFLAGS) -pipe
+CXXFLAGS := $(CFLAGS) $(CXXFLAGS)
+LDFLAGS  :=
 
 #_CC  := @gcc
 #_CXX := @g++

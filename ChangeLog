@@ -3,6 +3,9 @@ ChangeLog of simple C/C++ library "clib"
  - removed
  * changed
 
+2015.01.30
+ * str_t: update int64 printf() format
+
 2015.01.29
  * set version tag v0.2b
 

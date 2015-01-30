@@ -16,16 +16,13 @@ HDRS := ../../str.h \
         ../../ini.h \
         ../../aini.h
 
-DEFS    := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3" 
+DEFS     := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3" \
+            -D__STDC_FORMAT_MACROS
+OPT      := -Os -fomit-frame-pointer
+WARN     := -Wall
 
-#           -D__USE_MINGW_ANSI_STDIO 1
-#           -DINI_INLINE="static inline"
-
-OPT     := -Os -fomit-frame-pointer
-WARN    := -Wall
-
-CFLAGS   := $(DEFS) $(OPT) -pipe $(WARN)
-CXXFLAGS := $(DEFS) $(OPT) -pipe $(WARN) $(CXXFLAGS)
+CFLAGS   := $(WARN) $(OPTIM) $(DEFS) $(CFLAGS) -pipe
+CXXFLAGS := $(CFLAGS) $(CXXFLAGS)
 LDFLAGS  := -lm
 
 #_CC  := @gcc
