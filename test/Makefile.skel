@@ -1,6 +1,6 @@
 #============================================================================
 # Skeleton for GNU Make
-# Version: 0.7.1
+# Version: 0.7.2
 # File: "Makefile.skel"
 # (C) 2005...2015 Alex Zorg <azorg@mail.ru>
 # Licensed by GNU General Public License version 2
@@ -23,17 +23,15 @@
 #HDR_DIRS := . libs/include
 #
 #----------------------------------------------------------------------------
-#DEFS      := -DUNIT_DEBUG
-#
 #INC_DIRS  := ../libs/include 
-#INC_FLAGS := -I/usr/include/foo -I `wx-config --cxxflags` $(DEFS)
-#
+#INC_FLAGS := -I/usr/include/foo -I `wx-config --cxxflags`
+#DEFS      := -DUNIT_DEBUG
 #OPTIM     := -Os -fomit-frame-pointer
 #WARN      := -Wall
 #
 #ASFLAGS   := -mcpu=cortex-m3 -mthumb $(ASFLAGS)
-#CFLAGS    := $(WARN) -pipe $(OPTIM) $(DEFS) $(CFLAGS)
-#CXXFLAGS  := `wx-config --cxxflags` $(CFLAGS) $(CXXFLAGS)
+#CFLAGS    := $(WARN) $(OPTIM) $(DEFS) $(CFLAGS) -pipe
+#CXXFLAGS  := `wx-config --cxxflags` $(CXXFLAGS) $(CFLAGS)
 #LDFLAGS   := `wx-config --libs` -lm -lrt -lpthread $(LDFLAGS)
 #----------------------------------------------------------------------------
 #_AS  := @as
@@ -169,14 +167,14 @@ $(DEPS_DIR)/%.d: %.s
 
 $(DEPS_DIR)/%.d: %.c
 	$(ECHO) ">>> make dependency for $<"
-	$(_CC_DEP) $(MKDEPOPT) $(INC_FLAGS) $< > $@.tmp
+	$(_CC_DEP) $(MKDEPOPT) $(INC_FLAGS) $(DEFS) $< > $@.tmp
 	$(ECHO) -n '$(OBJS_DIR)/' > $@
 	$(CAT) $@.tmp >> $@
 	$(RM) $@.tmp
 
 $(DEPS_DIR)/%.d: %.cpp
 	$(ECHO) ">>> make dependency for $<"
-	$(_CXX_DEP) $(MKDEPOPT) $(INC_FLAGS) $< > $@.tmp
+	$(_CXX_DEP) $(MKDEPOPT) $(INC_FLAGS) $(DEFS) $< > $@.tmp
 	$(ECHO) -n '$(OBJS_DIR)/' > $@
 	$(CAT) $@.tmp >> $@
 	$(RM) $@.tmp
