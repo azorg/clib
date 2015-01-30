@@ -103,7 +103,7 @@ static int _ini_find_section(const ini_t *f, const char *section)
       if (j == -1)
       {
         i = -1;
-	break;
+        break;
       } 
       if (*str_at(&f->data, j) != INI_RBR)
         continue;
@@ -118,8 +118,8 @@ static int _ini_find_section(const ini_t *f, const char *section)
       { // section found
         str_free(&h2);
         i = str_find_one_of(&f->data, INI_LR_LIST, j + 1, 0, -1);
-	if (i == -1 ) 
-	  i = str_size(&f->data);
+        if (i == -1) 
+          i = str_size(&f->data);
         break;
       }
 
@@ -154,8 +154,12 @@ static int _ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
       break; // can't find ident
     j = str_find_one_of(
           &f->data,
+#ifdef INI_EQ
           INI_EQ_LIST INI_LR_LIST INI_COM, // remove INI_SP by 2015.01.26
-	  i + 1, 0, -1);
+#else
+          INI_EQ_LIST INI_LR_LIST INI_COM INI_SP,
+#endif
+          i + 1, 0, -1);
     if (j == -1) j = str_size(&f->data);
     
     h1 = str_substr(&f->data, i, j - i);
@@ -345,8 +349,8 @@ void ini_write_value(ini_t *f,
   j = str_find_one_of(&f->data, INI_EQ_LIST, i, 0, k - i);
   if (j == -1)
   {
-     str_insert_cstr(&val, INI_EQ, 0);
-     j = i;
+    str_insert_cstr(&val, INI_EQ, 0);
+    j = i;
   }
   else
   {
@@ -409,16 +413,16 @@ str_t ini_decode_str(const char *str)
       if (c == INI_BSLASH_X)
       {
         str++;
-	i--;
-	base = 16;
+        i--;
+        base = 16;
         code_size = 2; // default (normal) size of byte HEX code
       }
       else if (c == INI_BSLASH)
       {
         str++;
-	i--;
+        i--;
         str_add_char(&retv, c);
-	continue;
+        continue;
       }
       if (i <= 1)
         break;

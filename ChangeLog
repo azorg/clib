@@ -4,6 +4,7 @@ ChangeLog of simple C/C++ library "clib"
  * changed
 
 2015.01.30
+ * ini_t: fix new bug if INI_EQ undefined
  * str_t: update int64 printf() format
 
 2015.01.29

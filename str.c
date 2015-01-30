@@ -60,7 +60,7 @@ void str_init_size_cstr(str_t *s, int size, const char *src)
       char c = *src++;
       s->ptr[i] = c;
       if (c == '\0')
-	break;
+      break;
     }
   }
   s->ptr[size] = '\0';
@@ -568,33 +568,33 @@ str_t str_sum(const char *fmt, ...)
     {
       str_t *p = lst[i].p = &lst[i].s;
       if      (c == 's')
-	str_init_cstr(p, va_arg(ap, char*));
+        str_init_cstr(p, va_arg(ap, char*));
       else if (c == 'c')
-	str_init_char(p, va_arg(ap, int));
+        str_init_char(p, va_arg(ap, int));
       else if (c == 'i')
-	str_init_int(p, va_arg(ap, int));
+        str_init_int(p, va_arg(ap, int));
       else if (c == 'u')
-	str_init_uint(p, va_arg(ap, unsigned int));
+        str_init_uint(p, va_arg(ap, unsigned int));
       else if (c == 'x')
-	str_init_int_hex(p, va_arg(ap, int));
+        str_init_int_hex(p, va_arg(ap, int));
 #ifdef STR_INT64_DEF
       else if (c == 'I')
-	str_init_int64(p, va_arg(ap, STR_INT64));
+        str_init_int64(p, va_arg(ap, STR_INT64));
       else if (c == 'U')
-	str_init_uint64(p, va_arg(ap, STR_UINT64));
+        str_init_uint64(p, va_arg(ap, STR_UINT64));
       else if (c == 'X')
-	str_init_uint64_hex(p, va_arg(ap, STR_UINT64));
+        str_init_uint64_hex(p, va_arg(ap, STR_UINT64));
 #endif // STR_INT64_DEF
 #ifdef STR_FLOAT
       else if (c == 'f')
-	str_init_float(p, (float) va_arg(ap, double));
+        str_init_float(p, (float) va_arg(ap, double));
       else if (c == 'd')
-	str_init_double(p, va_arg(ap, double));
+        str_init_double(p, va_arg(ap, double));
 #endif // STR_FLOAT
       else if (c == 'b')
-	str_init_bool(p, va_arg(ap, int));
+        str_init_bool(p, va_arg(ap, int));
       else
-	str_init_zero(p); // unknown type
+        str_init_zero(p); // unknown type
     }
     sum_size += lst[i].p->size;
   }

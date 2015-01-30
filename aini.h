@@ -9,7 +9,7 @@
 #ifndef AINI_H
 #define AINI_H
 //---------------------------------------------------------------------------
-#include "string" // std::string
+#include <string> // std::string
 #include "ini.h"  // ini_t/str_t
 //---------------------------------------------------------------------------
 namespace aclass {
@@ -177,7 +177,7 @@ public:
   {
     str_t val = ini_read_bin(&f, section.c_str(), ident.c_str(),
                              default_value.c_str(),
-			     default_value.size());
+                             default_value.size());
     std::string ret_val(str_c(&val), str_size(&val));
     str_free(&val);
     return ret_val;

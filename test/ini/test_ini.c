@@ -49,7 +49,7 @@ int main()
     }
     
     ini_write_value(&f, "", " global ", " 123 456 ");
-    ini_write_str(&f, "", "hard str", "\n1 23\\456\\789 ;# ");
+    ini_write_str(&f, "", "hard_str", "\n1 23\\456\\789 ;# ");
     
     ini_write_str  (&f, "sec", "str1", "some string #1 ");
     ini_write_str  (&f, "sec", "str2", " some string #2");
@@ -79,7 +79,7 @@ int main()
       g_err++;
     }
     str_free(&v);
-    v = ini_read_str(&f, "", "hard str", "???");
+    v = ini_read_str(&f, "", "hard_str", "???");
     if (!str_is_equal_cstr(&v, "\n1 23\\456\\789 ;# "))
     { // error
       printf("error: ini_read_str() = '%s'\n", str_c(&v));
@@ -218,7 +218,7 @@ int main()
       str_free(&section);
     }
     
-    ini_write_str(&f, "", "first ident", "hello world");
+    ini_write_str(&f, "", "first_ident", "hello world");
     ini_write_str(&f, "s2", "additional", "end of section");
     ini_write_float (&f, "math", "Pi_f", (float) M_PI);
     ini_write_double(&f, "math", "Pi_d", M_PI);
