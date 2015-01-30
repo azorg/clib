@@ -1,6 +1,6 @@
 #============================================================================
 # Skeleton for GNU Make
-# Version: 0.7.2
+# Version: 0.7.3
 # File: "Makefile.skel"
 # (C) 2005...2015 Alex Zorg <azorg@mail.ru>
 # Licensed by GNU General Public License version 2
@@ -95,7 +95,7 @@ OUT := $(OUT_DIR)/$(OUT_NAME)$(EXEC_EXT)
 #override CFLAGS   +=
 #override CXXFLAGS +=
 #override LDFLAGS  +=
-override INC_FLAGS += $(addprefix -I, $(SRC_DIRS) $(INC_DIRS) $(HDR_DIRS))
+override INC_FLAGS += $(addprefix -I, $(INC_DIRS) $(HDR_DIRS) $(SRC_DIRS))
 #----------------------------------------------------------------------------
 ifndef _AS
   _AS := @as

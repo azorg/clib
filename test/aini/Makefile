@@ -16,14 +16,16 @@ HDRS := ../../str.h \
         ../../ini.h \
         ../../aini.h
 
+#INC_DIRS  := ../libs/include 
+#INC_FLAGS := -I/usr/include/foo
 DEFS     := -DSTR_DEBUG -DSTR_DEF_SECTOR_SIZE="3" \
             -D__STDC_FORMAT_MACROS
 OPT      := -Os -fomit-frame-pointer
 WARN     := -Wall
 
-CFLAGS   := $(WARN) $(OPTIM) $(DEFS) $(CFLAGS) -pipe
-CXXFLAGS := $(CFLAGS) $(CXXFLAGS)
-LDFLAGS  := -lm
+CFLAGS    := $(WARN) $(OPTIM) $(DEFS) $(CFLAGS) -pipe
+CXXFLAGS  := $(CXXFLAGS) $(CFLAGS)
+LDFLAGS   := -lm $(LDFLAGS)
 
 #_CC  := @gcc
 #_CXX := @g++
