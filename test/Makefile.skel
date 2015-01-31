@@ -1,6 +1,6 @@
 #============================================================================
 # Skeleton for GNU Make
-# Version: 0.8.0
+# Version: 0.8.2
 # File: "Makefile.skel"
 # (C) 2005...2015 Alex Zorg <azorg@mail.ru>
 # Licensed by GNU General Public License version 2
@@ -10,7 +10,7 @@
 #OUT_NAME    := hello
 #EXEC_EXT    := .exe
 #OUT_DIR     := .
-#CLEAN_DIR   := $(OUT_DIR)
+#CLEAN_DIR   := $(OUT_DIR)/tmp
 #CLEAN_FILES := "$(OUT_DIR)/$(OUT_NAME).map" "$(OUT_DIR)/$(OUT_NAME).exe"
 #----------------------------------------------------------------------------
 #
@@ -89,9 +89,9 @@ ifndef ASMS_DIR
   ASMS_DIR := disasm
 endif
 #----------------------------------------------------------------------------
-DEPS_DIR_FLG := $(DEPS_DIR)/.empty
-OBJS_DIR_FLG := $(OBJS_DIR)/.empty
-ASMS_DIR_FLG := $(ASMS_DIR)/.empty
+DEPS_DIR_FLG := $(DEPS_DIR)/.dir
+OBJS_DIR_FLG := $(OBJS_DIR)/.dir
+ASMS_DIR_FLG := $(ASMS_DIR)/.dir
 #----------------------------------------------------------------------------
 OUT := $(OUT_DIR)/$(OUT_NAME)$(EXEC_EXT)
 #----------------------------------------------------------------------------
@@ -150,17 +150,17 @@ ifndef TAGS_FILE
   TAGS_FILE := TAGS
 endif
 #----------------------------------------------------------------------------
-RM    := @rm
-RMF   := @rm -f
-RMDIR := @rm -rf
-#RMDIR := @rmdir -p
-MKDIR := @mkdir -p
-ECHO  := @echo
-TOUCH := @touch
-CAT   := @cat
-WC    := @wc
-MAKE  := @make
-SHELL := sh
+RM     := @rm
+RMF    := @rm -f
+RMDIR  := @rmdir -p
+RMDIRF := @rm -rf
+MKDIR  := @mkdir -p
+ECHO   := @echo
+TOUCH  := @touch
+CAT    := @cat
+WC     := @wc
+MAKE   := @make
+SHELL  := sh
 #----------------------------------------------------------------------------
 BASE_SRCS := $(notdir $(basename $(SRCS)))
 OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(BASE_SRCS)))
@@ -175,7 +175,7 @@ $(DEPS_DIR)/%.d: %.s
 $(DEPS_DIR)/%.d: %.c $(DEPS_DIR_FLG)
 	$(ECHO) ">>> make dependency for $<"
 	$(ECHO) -n '$(OBJS_DIR)/' > $@
-	 $(_CC_DEP) $(MKDEPOPT) $(INC_FLAGS) $(DEFS) $< >> $@
+	$(_CC_DEP) $(MKDEPOPT) $(INC_FLAGS) $(DEFS) $< >> $@
 
 $(DEPS_DIR)/%.d: %.cpp $(DEPS_DIR_FLG)
 	$(ECHO) ">>> make dependency for $<"
@@ -207,24 +207,27 @@ out: $(OUT)
 
 dep: $(DEPS)
 
-obj: $(OBJS)
+obj: dep $(OBJS)
 
 clr: clrdep clrobj
 
 clrdep: 
 	$(RMF) $(DEPS)
+	$(RMF) $(DEPS_DIR_FLG)
 	$(RMDIR) $(DEPS_DIR)
 
 clrobj: 
 	$(RMF) $(OBJS)
+	$(RMF) $(OBJS_DIR_FLG)
 	$(RMDIR) $(OBJS_DIR)
 
 clean:
 	$(RMF) $(OUT)
 	$(RMF) $(OBJS_DIR)/*.o $(DEPS_DIR)/*.d $(ASMS_DIR)/*.s
-	$(RMDIR) $(OBJS_DIR) $(DEPS_DIR) $(ASMS_DIR)
+	$(RMF) $(DEPS_DIR_FLG) $(OBJS_DIR_FLG)
+	$(RMDIRF) $(OBJS_DIR) $(DEPS_DIR) $(ASMS_DIR)
 	$(RMF) $(CLEAN_FILES) $(TAGS_FILE)
-	$(RMDIR) $(CLEAN_DIR)
+	$(RMDIRF) $(CLEAN_DIR)
 
 rebuild:
 	$(RMF) $(OBJS) $(DEPS)
@@ -233,6 +236,7 @@ rebuild:
 list:
 	$(ECHO) SRCS: $(SRCS)
 	$(ECHO) HDRS: $(HDRS)
+	$(ECHO) OBJS: $(OBJS)
 
 dirs:
 	$(ECHO) SRC_DIRS: $(SRC_DIRS)
