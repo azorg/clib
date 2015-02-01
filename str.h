@@ -3,7 +3,6 @@
  * Version: 0.2b
  * File: "str.h"
  * (C) 2007-2015 Alex Zorg <azorg@mail.com>
- * Licensed by GNU General Public License version 2
  */
 
 #ifndef STR_H
