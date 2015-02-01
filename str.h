@@ -20,7 +20,7 @@
 //---------------------------------------------------------------------------
 // inline macro (platform depended)
 #ifndef STR_INLINE
-#  if __GNUC__
+#  ifdef __GNUC__
 #    define STR_INLINE static inline
 #  else
 #    ifdef _WIN32 // Visual C++

@@ -13,7 +13,7 @@
 //---------------------------------------------------------------------------
 // inline macro (platform depended)
 #ifndef INI_INLINE
-#  if __GNUC__
+#  ifdef __GNUC__
 #    define INI_INLINE static inline
 #  else
 #    ifdef _WIN32 // Visual C++
