@@ -5,9 +5,9 @@
  * (C) 2007-2015 Alex Zorg <azorg@mail.ru>
  */
 
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #include "ini.h"
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 static STR_BOOL _ini_open_rd(ini_t *f) // if OK return 1, else 0
 {
   if (f->state == INI_CLOSE)
@@ -20,7 +20,7 @@ static STR_BOOL _ini_open_rd(ini_t *f) // if OK return 1, else 0
   }
   return STR_BOOL_TRUE; // read from file successful
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 static void _ini_open_wr(ini_t *f)
 {
   if (f->state != INI_WRITE)
@@ -29,7 +29,7 @@ static void _ini_open_wr(ini_t *f)
     f->state = INI_WRITE;
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_init_fname(ini_t *f, const char *fname)
 {
   str_init_cstr(&f->fname, fname);
@@ -39,14 +39,14 @@ void ini_init_fname(ini_t *f, const char *fname)
 #endif
   f->state = INI_CLOSE;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_free(ini_t *f)
 {
   ini_save(f);
   str_free(&f->data);
   str_free(&f->fname);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 STR_BOOL ini_save_ex(ini_t *f, STR_BOOL always_save)
 {
   if (f->state == INI_WRITE || always_save)
@@ -59,20 +59,20 @@ STR_BOOL ini_save_ex(ini_t *f, STR_BOOL always_save)
   }
   return STR_BOOL_TRUE; // write to file successful
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_load(ini_t *f, const char *data)
 {
   f->state = INI_WRITE;
   str_assign_cstr(&f->data, data);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_set_fname(ini_t *f, const char *fname)
 {
   ini_save(f);
   f->state = INI_CLOSE;
   str_assign_cstr(&f->fname, fname);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 static int _ini_find_section(const ini_t *f, const char *section)
 {
   int i, j;
@@ -130,7 +130,7 @@ static int _ini_find_section(const ini_t *f, const char *section)
   str_free(&h);
   return i; // return index of section data or -1
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 static int _ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
 {
   int j;
@@ -178,7 +178,7 @@ static int _ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
   str_free(&h);
   return -1; // ident not found
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 static int _ini_add_section(ini_t *f, const char *section)
 {
   str_t h, h1;
@@ -201,7 +201,7 @@ static int _ini_add_section(ini_t *f, const char *section)
   str_free(&h);
   return str_size(&f->data) - 1;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // check section
 STR_BOOL ini_has_section(ini_t *f, const char *section)
 {
@@ -213,7 +213,7 @@ STR_BOOL ini_has_section(ini_t *f, const char *section)
 
   return STR_BOOL_TRUE; // section exist
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // check ident
 STR_BOOL ini_has_ident(ini_t *f, const char *section, const char *ident)
 {
@@ -232,7 +232,7 @@ STR_BOOL ini_has_ident(ini_t *f, const char *section, const char *ident)
   
   return STR_BOOL_TRUE; // ident exist
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t ini_read_value(ini_t *f,
                      const char *section, const char *ident,
                      const char *default_value)
@@ -273,7 +273,7 @@ str_t ini_read_value(ini_t *f,
 return_default_value:
   return str_cstr(default_value);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_value(ini_t *f,
                      const char *section, const char *ident,
                      const char *value)
@@ -369,7 +369,7 @@ void ini_write_value(ini_t *f,
   str_insert(&f->data, &val, j);
   str_free(&val);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t ini_code_str(const char *str)
 {
   str_t retv = str_zero();
@@ -393,7 +393,7 @@ str_t ini_code_str(const char *str)
   }
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t ini_decode_str(const char *str)
 {
   int i;
@@ -437,7 +437,7 @@ str_t ini_decode_str(const char *str)
   }
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t ini_read_str(ini_t *f,
                    const char *section, const char *ident,
                    const char *default_value)
@@ -461,7 +461,7 @@ str_t ini_read_str(ini_t *f,
   str_free(&val);
   return str;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_str(ini_t *f,
                    const char *section, const char *ident,
                    const char *value)
@@ -472,7 +472,7 @@ void ini_write_str(ini_t *f,
   ini_write_value(f, section, ident, str_c(&str)); 
   str_free(&str);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #ifdef STR_EXTRA
 str_t ini_read_bin(ini_t *f,
                    const char *section, const char *ident,
@@ -485,7 +485,7 @@ str_t ini_read_bin(ini_t *f,
   str_free(&def);
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_bin(ini_t *f,
                    const char *section, const char *ident,
                    const char *value, int size)
@@ -495,7 +495,7 @@ void ini_write_bin(ini_t *f,
   str_free(&val);
 }
 #endif // STR_EXTRA
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 long ini_read_long(ini_t *f,
                    const char *section, const char *ident,
                    long default_value)
@@ -508,7 +508,7 @@ long ini_read_long(ini_t *f,
   str_free(&def);
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_long(ini_t *f,
                     const char *section, const char *ident,
                     long value)
@@ -517,7 +517,7 @@ void ini_write_long(ini_t *f,
   ini_write_value(f, section, ident, str_c(&val)); 
   str_free(&val);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #ifdef STR_INT64_DEF
 // read and write value as int64
 STR_INT64 ini_read_int64(ini_t *f,
@@ -532,7 +532,7 @@ STR_INT64 ini_read_int64(ini_t *f,
   str_free(&def);
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_int64(ini_t *f,
                      const char *section, const char *ident,
                      STR_INT64 value)
@@ -542,7 +542,7 @@ void ini_write_int64(ini_t *f,
   str_free(&val);
 }
 #endif // STR_INT64_DEF
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #ifdef STR_FLOAT
 float ini_read_float(ini_t *f,
                      const char *section, const char *ident,
@@ -555,7 +555,7 @@ float ini_read_float(ini_t *f,
   str_free(&def);
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_float(ini_t *f,
                      const char *section, const char *ident,
                      float value)
@@ -564,7 +564,7 @@ void ini_write_float(ini_t *f,
   ini_write_value(f, section, ident, str_c(&val)); 
   str_free(&val);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // read and write value as double
 double ini_read_double(ini_t *f,
                        const char *section, const char *ident,
@@ -577,7 +577,7 @@ double ini_read_double(ini_t *f,
   str_free(&def);
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_double(ini_t *f,
                       const char *section, const char *ident,
                       double value)
@@ -587,7 +587,7 @@ void ini_write_double(ini_t *f,
   str_free(&val);
 }
 #endif // STR_FLOAT
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 STR_BOOL ini_read_bool(ini_t *f,
                        const char *section, const char *ident,
                        STR_BOOL default_value)
@@ -599,7 +599,7 @@ STR_BOOL ini_read_bool(ini_t *f,
   str_free(&def);
   return retv;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void ini_write_bool(ini_t *f,
                     const char *section, const char *ident,
                     STR_BOOL value)
@@ -608,7 +608,7 @@ void ini_write_bool(ini_t *f,
   ini_write_value(f, section, ident, str_c(&val)); 
   str_free(&val);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 /*** end of "ini.c" ***/
 

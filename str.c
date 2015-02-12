@@ -5,9 +5,9 @@
  * (C) 2007-2015 Alex Zorg <azorg@mail.ru>
  */
 
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #include "str.h"
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 char _str_delim[] = STR_TRIM_DELIMITERS; // default trim delimiters
 #ifdef STR_EXCEPTION_STRING
 char _str_exstr[] = STR_EXCEPTION_STRING; // exception string
@@ -15,19 +15,19 @@ char _str_exstr[] = STR_EXCEPTION_STRING; // exception string
 int  _str_def_sector = STR_DEF_SECTOR_SIZE; // sector default value
 char _str_loc_al[]   = STR_LOCAL_AL; // local alphabet low case
 char _str_loc_au[]   = STR_LOCAL_AU; // local alphabet upper case
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #ifdef STR_DEBUG
 unsigned _str_malloc_num   = 0;
 unsigned _str_malloc_bytes = 0;
 #endif // STR_DEBUG
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void _str_create_size(str_t *s, int size) // size > 0
 {
   s->size = size;
   size = (size + s->sector) / s->sector; // number of sectors "[(A+B-1+1)/B]"
   s->ptr = _str_malloc(size * s->sector);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void _str_create_cstr(str_t *s, const char *src) // src != NULL
 {
   unsigned int seg;
@@ -40,7 +40,7 @@ void _str_create_cstr(str_t *s, const char *src) // src != NULL
   s->ptr = _str_malloc(seg * s->sector);
   memcpy((void*) s->ptr, (const void*) src, s->size + 1);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_init_size_cstr(str_t *s, int size, const char *src)
 {
   s->sector = _str_def_sector;
@@ -64,7 +64,7 @@ void str_init_size_cstr(str_t *s, int size, const char *src)
   }
   s->ptr[size] = '\0';
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_init_cstr(str_t *s, const char *src)
 {
   s->sector = _str_def_sector;
@@ -76,7 +76,7 @@ void str_init_cstr(str_t *s, const char *src)
   }
   _str_create_cstr(s, src);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_init_str(str_t *s, const str_t *src)
 {
   s->sector = src->sector; // legacy sector size
@@ -87,7 +87,7 @@ void str_init_str(str_t *s, const str_t *src)
   }
   else s->size = 0;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_init_char(str_t *s, char src)
 {
   s->sector = _str_def_sector;
@@ -95,7 +95,7 @@ void str_init_char(str_t *s, char src)
   s->ptr[0] = src;
   s->ptr[1] = '\0';
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
 {
   str_t buf; // temp buffer for vsnprintf()
@@ -164,7 +164,7 @@ void str_init_vsprintf(str_t *s, const char *fmt, va_list ap)
   // free buffer
   str_free(&buf);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_init_bool(str_t *s, STR_BOOL src)
 {
   s->sector = _str_def_sector;
@@ -173,7 +173,7 @@ void str_init_bool(str_t *s, STR_BOOL src)
   else
     _str_create_cstr(s, STR_BOOL_FALSE_STR);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_hex(unsigned long value, int digits)
 {
   str_t s;
@@ -194,7 +194,7 @@ str_t str_hex(unsigned long value, int digits)
   }
   return s;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_bin(unsigned long value, int digits)
 {
   str_t s;
@@ -214,7 +214,7 @@ str_t str_bin(unsigned long value, int digits)
   }
   return s;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_oct(unsigned long value, int digits)
 {
   str_t s;
@@ -234,7 +234,7 @@ str_t str_oct(unsigned long value, int digits)
   }
   return s;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_dec(unsigned long value, int digits)
 {
   str_t s;
@@ -243,7 +243,7 @@ str_t str_dec(unsigned long value, int digits)
   str_free(&fmt);
   return s;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 STR_BOOL str_is_equal(const str_t *s1, const str_t *s2)
 {
   if (s1->size != s2->size) return STR_BOOL_FALSE;
@@ -251,7 +251,7 @@ STR_BOOL str_is_equal(const str_t *s1, const str_t *s2)
   if (strcmp(s1->ptr, s2->ptr) == 0) return STR_BOOL_TRUE;
   else                               return STR_BOOL_FALSE;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 STR_BOOL str_is_equal_cstr(const str_t *s1, const char *s2)
 {
   if (s1->size == 0)
@@ -262,7 +262,7 @@ STR_BOOL str_is_equal_cstr(const str_t *s1, const char *s2)
   if (strcmp(s1->ptr, s2) == 0) return STR_BOOL_TRUE;
   else                          return STR_BOOL_FALSE;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 long str_to_long_cstyle(const str_t *s, long def_val, unsigned char base)
 {
   unsigned int i;
@@ -329,7 +329,7 @@ err:
   str_free(&t);
   return def_val;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #ifdef STR_INT64_DEF
 STR_INT64 str_to_int64(const str_t *s, STR_INT64 def_val, unsigned char base)
 {
@@ -362,7 +362,7 @@ err:
   return def_val;
 }
 #endif // STR_INT64_DEF
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 long str_to_long_ex(const str_t *s, long def_val, unsigned char base)
 {
   unsigned int i;
@@ -393,7 +393,7 @@ err:
   str_free(&t);
   return def_val;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 STR_BOOL str_to_bool(const str_t *s)
 {
   if (str_is_equal_cstr(s, STR_BOOL_TRUE_STR))
@@ -407,7 +407,7 @@ STR_BOOL str_to_bool(const str_t *s)
 
   return STR_BOOL_FALSE;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_assign(str_t *dst, const str_t *src)
 {
   unsigned int b_cur = 0, b_new = 0;
@@ -432,7 +432,7 @@ void str_assign(str_t *dst, const str_t *src)
     else dst->size = 0;
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_assign_cstr(str_t *dst, const char *src)
 {
   unsigned int src_size = 0, b_cur = 0, b_new = 0;
@@ -458,7 +458,7 @@ void str_assign_cstr(str_t *dst, const char *src)
     else dst->size = 0;
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_add(str_t *s, const str_t *add)
 {
   unsigned int new_size = s->size + add->size;
@@ -483,7 +483,7 @@ void str_add(str_t *s, const str_t *add)
     s->ptr  = new_ptr;
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_add_cstr(str_t *s, const char *add)
 {
   unsigned int new_size, b_cur = 0, b_new = 0;
@@ -510,7 +510,7 @@ void str_add_cstr(str_t *s, const char *add)
     s->ptr  = new_ptr;
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_add_char(str_t *s, char add)
 {
   unsigned int b_cur = 0, b_new;
@@ -534,7 +534,7 @@ void str_add_char(str_t *s, char add)
     s->ptr = new_ptr;
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // concatenation
 // fmt: S - str_t*, s - char*, c - char, i - int, i - uint, x - hex
 //      f - float, d - double, I - int64, U - uint64, X - uint64-HEX, ...
@@ -624,7 +624,7 @@ str_t str_sum(const char *fmt, ...)
 
   return s;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // accessing character by specified index
 char *str_at(const str_t *s, int index)
 {
@@ -635,7 +635,7 @@ char *str_at(const str_t *s, int index)
   c = STR_ERROR_CHAR;
   return &c;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // convert to "C" string
 const char *str_c(const str_t *s)
 {
@@ -645,7 +645,7 @@ const char *str_c(const str_t *s)
   c = '\0';
   return &c;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_substr(const str_t *s, int index, int count)
 {
   str_t r;
@@ -664,7 +664,7 @@ str_t str_substr(const str_t *s, int index, int count)
     str_init_zero(&r);
   return r;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_strpos(const str_t *s, const str_t *substr, int index)
 {
   char *p;
@@ -674,7 +674,7 @@ int str_strpos(const str_t *s, const str_t *substr, int index)
   if (p == (char*) NULL) return -1;
   return (int)(p - s->ptr);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_chrpos(const str_t *s, char subchr, int index)
 {
   char *p;
@@ -684,7 +684,7 @@ int str_chrpos(const str_t *s, char subchr, int index)
   if (p == (char*) NULL) return -1;
   return (int)(p - s->ptr);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_find_last(const str_t *s, const str_t *substr)
 {
   int i, j;
@@ -698,7 +698,7 @@ int str_find_last(const str_t *s, const str_t *substr)
   }
   return j;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_find_one_of(
   const str_t *s,   // find in this string
   const char *cstr, // find first one of char from this C string
@@ -720,7 +720,7 @@ int str_find_one_of(
   }
   return -1;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_skip_for(
   const str_t *s,   // find in this string
   const char *cstr, // skip any char from this C string
@@ -757,7 +757,7 @@ int str_skip_for(
   }
   return -1;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_lower_case(const str_t *s)
 {
   str_t r;
@@ -788,7 +788,7 @@ str_t str_lower_case(const str_t *s)
     str_init_zero(&r);
   return r;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_upper_case(const str_t *s)
 {
   str_t r;
@@ -819,7 +819,7 @@ str_t str_upper_case(const str_t *s)
     str_init_zero(&r);
   return r;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_trim_ex(const str_t *s, const char *delim)
 {
   int i, j;
@@ -829,28 +829,28 @@ str_t str_trim_ex(const str_t *s, const char *delim)
   if (++j == 0) return str_zero();
   return str_substr(s, i, j - i);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_trim_left_ex(const str_t *s, const char *delim)
 {
   int i = str_skip_for(s, delim, 0, 0, -1); // skip delim. from begin
   if (i == -1) return str_zero();
   return str_substr(s, i, -1);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_trim_right_ex(const str_t *s, const char *delim)
 {
   int i = str_skip_for(s, delim, s->size - 1, -1, 1); // skip delim. from end
   if (++i == 0) return str_zero();
   return str_substr(s, 0, i);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_swap(str_t *s1, str_t *s2)
 {
   str_t tmp = *s1;
   *s1 = *s2;
   *s2 = tmp;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_set_size(str_t *s, int new_size)
 {
   int b_cur = 0, b_new = 0;
@@ -879,7 +879,7 @@ void str_set_size(str_t *s, int new_size)
   }
   s->ptr[s->size = new_size] = '\0';
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_insert(str_t *s, const str_t *str, int index)
 {
   int new_size, b_cur = 0, b_new = 0;
@@ -912,7 +912,7 @@ void str_insert(str_t *s, const str_t *str, int index)
     s->ptr[s->size = new_size] = '\0';
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_insert_cstr(str_t *s, const char *cstr, int index)
 {
   str_t str;
@@ -920,7 +920,7 @@ void str_insert_cstr(str_t *s, const char *cstr, int index)
   str_insert(s, &str, index);
   str_free(&str);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_insert_char(str_t *s, char chr, int index)
 {
   str_t str;
@@ -928,7 +928,7 @@ void str_insert_char(str_t *s, char chr, int index)
   str_insert(s, &str, index);
   str_free(&str);
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_delete(str_t *s, int index, int count)
 {
   if (index < 0) index += s->size; // like Python
@@ -970,7 +970,7 @@ void str_delete(str_t *s, int index, int count)
     s->ptr[s->size = new_size] = '\0';
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_replace(str_t *s, const str_t *old_substr, const str_t *new_substr)
 { // You can optimize this function
   int i = str_strpos(s, old_substr, 0);
@@ -981,7 +981,7 @@ int str_replace(str_t *s, const str_t *old_substr, const str_t *new_substr)
   }
   return i;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_fill(str_t *s, char chr, int index, int count)
 {
   if (index < 0) index += s->size; // like Python
@@ -991,7 +991,7 @@ void str_fill(str_t *s, char chr, int index, int count)
     memset(s->ptr + index, chr, count);
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_set_sector(str_t *s, int new_sector)
 {
   if (new_sector < 0) return; // do nothing
@@ -1010,7 +1010,7 @@ void str_set_sector(str_t *s, int new_sector)
   }
   s->sector = new_sector;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_rol(str_t *s, int count) // left scrolling
 {
   if (s->size != 0 && count > 0)
@@ -1025,7 +1025,7 @@ void str_rol(str_t *s, int count) // left scrolling
     while (count-- > 0) *dst++ = ' ';
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 void str_ror(str_t *s, int count) // right scrolling
 {
   if (s->size != 0 && count > 0)
@@ -1040,7 +1040,7 @@ void str_ror(str_t *s, int count) // right scrolling
     while (count-- > 0) *(--dst) = ' ';
   }
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 str_t str_mul(const str_t *str, int times)
 {
   str_t s;
@@ -1049,7 +1049,7 @@ str_t str_mul(const str_t *str, int times)
     str_add(&s, str);
   return s;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #ifdef STR_EXTRA
 // convert binary array to hex string (like "01:23:AB:CD")
 str_t str_bin2hex(const char *bin, int size)
@@ -1078,7 +1078,7 @@ str_t str_bin2hex(const char *bin, int size)
   }
   return out;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // convert hex string (like "01:23:AB:CD") to binary array
 str_t str_hex2bin(const char *str)
 {
@@ -1125,7 +1125,7 @@ return_empty_string:
   return str_zero();
 }
 #endif // STR_EXTRA
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_read_from_file(str_t *s, const char *fname, int add_flag)
 {
   int i;
@@ -1137,7 +1137,7 @@ int str_read_from_file(str_t *s, const char *fname, int add_flag)
   fclose(file);
   return 1;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_write_to_file(const str_t *s, const char *fname, int add_flag)
 {
   char *p;
@@ -1153,7 +1153,7 @@ int str_write_to_file(const str_t *s, const char *fname, int add_flag)
   fclose(file);
   return (count == 0) ? 1 : 0;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_read_from_bin_file(str_t *s, const char *fname, int add_flag)
 {
   int old_size, count, size;
@@ -1188,7 +1188,7 @@ error:
   return 1;
 #endif // !STR_FAST_FILE_IO
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 int str_write_to_bin_file(const str_t *s, const char *fname, int add_flag)
 {
   int count = s->size;
@@ -1211,7 +1211,7 @@ int str_write_to_bin_file(const str_t *s, const char *fname, int add_flag)
   fclose(file);
   return (count == 0) ? 1 : 0;
 }
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 /*** end of "str.c" ***/
 
