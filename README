@@ -1,5 +1,5 @@
 clib
-----
+====
 
 str.h/str.c     - simple C library for working with ASCIIZ
                   and byte dynamic strings (str_t)

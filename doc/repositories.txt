@@ -1,3 +1,0 @@
-public:  https://github.com/azorg/clib.git
-private: https://azorg@bitbucket.org/azorg/clib.git
-
