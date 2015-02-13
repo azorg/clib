@@ -201,13 +201,13 @@ public:
   // read value as long
   inline long read_long(const char *section,
                         const char *ident,
-                        long default_value)
+                        long default_value = 0)
   {
     return ini_read_long(&f, section, ident, default_value);
   }
   inline long read_long(const std::string &section,
                         const std::string &ident,
-                        long default_value)
+                        long default_value = 0)
   {
     return ini_read_long(&f, section.c_str(), ident.c_str(), default_value);
   }
@@ -230,13 +230,13 @@ public:
   // read value as int64 (HEX format)
   inline STR_INT64 read_int64(const char *section,
                               const char *ident,
-                              STR_INT64 default_value)
+                              STR_INT64 default_value = 0)
   {
     return ini_read_int64(&f, section, ident, default_value);
   }
   inline STR_INT64 read_int64(const std::string &section,
                               const std::string &ident,
-                              STR_INT64 default_value)
+                              STR_INT64 default_value = 0)
   {
     return ini_read_int64(&f, section.c_str(), ident.c_str(), default_value);
   }
@@ -260,13 +260,13 @@ public:
   // read value as float
   inline float read_float(const char *section,
                           const char *ident,
-                          float default_value)
+                          float default_value = 0.)
   {
     return ini_read_float(&f, section, ident, default_value);
   }
   inline float read_float(const std::string &section,
                           const std::string &ident,
-                          float default_value)
+                          float default_value = 0.)
   {
     return ini_read_float(&f, section.c_str(), ident.c_str(), default_value);
   }
@@ -288,13 +288,13 @@ public:
   // read value as double
   inline float read_double(const char *section,
                            const char *ident,
-                           double default_value)
+                           double default_value = 0.)
   {
     return (float) ini_read_double(&f, section, ident, default_value);
   }
   inline float read_double(const std::string &section,
                            const std::string &ident,
-                           double default_value)
+                           double default_value = 0.)
   {
     return (float) ini_read_double(&f, section.c_str(), ident.c_str(), default_value);
   }
@@ -317,13 +317,13 @@ public:
   // read value as bool
   inline bool read_bool(const char *section,
                         const char *ident,
-                        bool default_value)
+                        bool default_value = false)
   {
     return !!ini_read_bool(&f, section, ident, default_value);
   }
   inline bool read_bool(const std::string &section,
                         const std::string &ident,
-                        bool default_value)
+                        bool default_value = false)
   {
     return !!ini_read_bool(&f, section.c_str(), ident.c_str(), default_value);
   }

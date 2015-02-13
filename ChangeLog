@@ -3,6 +3,9 @@ ChangeLog of simple C/C++ library "clib"
  - removed
  * changed
 
+2015.02.13
+ + aclass::aini - add default values = 0 to read_* functions
+
 2015.02.12
  + add fsize.h/fsize.c module
 
