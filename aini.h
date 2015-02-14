@@ -67,7 +67,7 @@ public:
   // read value "as-is"
   inline std::string read_value(const char *section,
                                 const char *ident,
-                                const char *default_value)
+                                const char *default_value = "")
   {
     str_t val = ini_read_value(&f, section, ident, default_value);
     std::string ret_val = str_c(&val);
@@ -76,7 +76,7 @@ public:
   }
   inline std::string read_value(const std::string &section,
                                 const std::string &ident,
-                                const std::string &default_value)
+                                const std::string &default_value = "")
   {
     str_t val = ini_read_value(&f, section.c_str(), ident.c_str(),
                                default_value.c_str());
@@ -125,7 +125,7 @@ public:
   // read value as string
   inline std::string read_str(const char *section,
                               const char *ident,
-                              const char *default_value)
+                              const char *default_value = "")
   {
     str_t val = ini_read_str(&f, section, ident, default_value);
     std::string ret_val(str_c(&val), str_size(&val));
@@ -134,7 +134,7 @@ public:
   }
   inline std::string read_str(const std::string &section,
                               const std::string &ident,
-                              const std::string &default_value)
+                              const std::string &default_value = "")
   {
     str_t val = ini_read_str(&f, section.c_str(), ident.c_str(),
                              default_value.c_str());

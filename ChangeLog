@@ -3,6 +3,16 @@ ChangeLog of simple C/C++ library "clib"
  - removed
  * changed
 
+2015.02.14
+ + add:
+     void str_to_lower_case(str_t *s);
+     void str_to_upper_case(str_t *s);
+     int str_cmp(const str_t *s1, const str_t *s2);
+     int str_icmp(const str_t *s1, const str_t *s2);
+     int str_icmp_c(const str_t *s1, const char *s2);
+     int str_icmp_cc(const char *s1, const str_t *s2);
+
+
 2015.02.13
  + aclass::aini - add default values = 0 to read_* functions
 

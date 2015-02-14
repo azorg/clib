@@ -79,11 +79,10 @@ static int _ini_find_section(const ini_t *f, const char *section)
   str_t h, h1, h2, h3;
   
   // trim and upper case section
-  h = str_cstr(section);
-  h1 = str_trim(&h);
-  str_free(&h);
-  h = str_upper_case(&h1);
+  h1 = str_cstr(section);
+  h  = str_trim(&h1);
   str_free(&h1);
+  str_to_upper_case(&h);
   
   // find section
   i = 0; // begin index
@@ -107,11 +106,10 @@ static int _ini_find_section(const ini_t *f, const char *section)
       if (*str_at(&f->data, j) != INI_RBR)
         continue;
       
-      h2 = str_substr(&f->data, i, j - i);
-      h3 = str_trim(&h2);
-      str_free(&h2);
-      h2 = str_upper_case(&h3);
+      h3 = str_substr(&f->data, i, j - i);
+      h2 = str_trim(&h3);
       str_free(&h3);
+      str_to_upper_case(&h2);
       
       if (str_is_equal(&h, &h2))
       { // section found
@@ -137,11 +135,10 @@ static int _ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
   str_t h, h1, h2;
   
   // trim and upper case ident
-  h = str_cstr(ident);
-  h1 = str_trim(&h);
-  str_free(&h);
-  h = str_upper_case(&h1);
+  h1 = str_cstr(ident);
+  h  = str_trim(&h1);
   str_free(&h1);
+  str_to_upper_case(&h);
   
   // find ident
   for (*end = i; i != -1;
@@ -161,11 +158,10 @@ static int _ini_find_ident(const ini_t *f, const char *ident, int i, int *end)
           i + 1, 0, -1);
     if (j == -1) j = str_size(&f->data);
     
-    h1 = str_substr(&f->data, i, j - i);
-    h2 = str_trim(&h1);
-    str_free(&h1);
-    h1 = str_upper_case(&h2);
+    h2 = str_substr(&f->data, i, j - i);
+    h1 = str_trim(&h2);
     str_free(&h2);
+    str_to_upper_case(&h1);
     
     if (str_is_equal(&h, &h1))
     { // ident found

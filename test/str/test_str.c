@@ -203,6 +203,24 @@ int main()
     }
 
     if (1)
+    { // str_cmp(), str_icmp()
+      str_t s1 = str_cstr("AbCdEF");
+      str_t s2 = str_cstr("abcDEF");
+
+      int r_cmp  = str_cmp (&s1, &s2);
+      int r_icmp = str_icmp(&s1, &s2);
+
+      printf("str_cmp('%s', '%s') = %i", str_c(&s1), str_c(&s2), r_cmp);
+      print_ok(r_cmp != 0);
+
+      printf("str_icmp('%s', '%s') = %i", str_c(&s1), str_c(&s2), r_icmp);
+      print_ok(r_icmp == 0);
+
+      str_free(&s2);
+      str_free(&s1);
+    }
+    
+    if (1)
     { // str_insert(), str_delete()
       str_t s1 = str_cstr("123456789");
       str_t s2 = str_cstr("xyz");

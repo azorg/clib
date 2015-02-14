@@ -244,25 +244,6 @@ str_t str_dec(unsigned long value, int digits)
   return s;
 }
 //----------------------------------------------------------------------------
-STR_BOOL str_is_equal(const str_t *s1, const str_t *s2)
-{
-  if (s1->size != s2->size) return STR_BOOL_FALSE;
-  if (s1->size == 0)        return STR_BOOL_TRUE;
-  if (strcmp(s1->ptr, s2->ptr) == 0) return STR_BOOL_TRUE;
-  else                               return STR_BOOL_FALSE;
-}
-//----------------------------------------------------------------------------
-STR_BOOL str_is_equal_cstr(const str_t *s1, const char *s2)
-{
-  if (s1->size == 0)
-  {
-    if (strlen(s2) == 0) return STR_BOOL_TRUE;
-    else                 return STR_BOOL_FALSE;
-  }
-  if (strcmp(s1->ptr, s2) == 0) return STR_BOOL_TRUE;
-  else                          return STR_BOOL_FALSE;
-}
-//----------------------------------------------------------------------------
 long str_to_long_cstyle(const str_t *s, long def_val, unsigned char base)
 {
   unsigned int i;
@@ -646,6 +627,57 @@ const char *str_c(const str_t *s)
   return &c;
 }
 //----------------------------------------------------------------------------
+STR_BOOL str_is_equal(const str_t *s1, const str_t *s2)
+{
+  if (s1->size != s2->size) return STR_BOOL_FALSE;
+  if (s1->size == 0)        return STR_BOOL_TRUE;
+  if (strcmp(s1->ptr, s2->ptr) == 0) return STR_BOOL_TRUE;
+  else                               return STR_BOOL_FALSE;
+}
+//----------------------------------------------------------------------------
+STR_BOOL str_is_equal_cstr(const str_t *s1, const char *s2)
+{
+  if (s1->size == 0)
+  {
+    if (strlen(s2) == 0) return STR_BOOL_TRUE;
+    else                 return STR_BOOL_FALSE;
+  }
+  if (strcmp(s1->ptr, s2) == 0) return STR_BOOL_TRUE;
+  else                          return STR_BOOL_FALSE;
+}
+//----------------------------------------------------------------------------
+int str_icmp(const str_t *s1, const str_t *s2)
+{
+  str_t str1 = str_upper_case(s1);
+  str_t str2 = str_upper_case(s2);
+  int retv = str_cmp(&str1, &str2);
+  str_free(&str2);
+  str_free(&str1);
+  return retv;
+}
+//----------------------------------------------------------------------------
+int str_icmp_c(const str_t *s1, const char *s2)
+{
+  int retv;
+  str_t str;
+  str_init_cstr(&str, s2);
+  retv = str_icmp(s1, &str);
+  str_free(&str);
+  return retv;
+}
+//----------------------------------------------------------------------------
+int str_icmp_cc(const char *s1, const char *s2)
+{
+  int retv;
+  str_t str1, str2;
+  str_init_cstr(&str1, s1);
+  str_init_cstr(&str2, s2);
+  retv = str_icmp(&str1, &str2);
+  str_free(&str2);
+  str_free(&str1);
+  return retv;
+}
+//----------------------------------------------------------------------------
 str_t str_substr(const str_t *s, int index, int count)
 {
   str_t r;
@@ -758,65 +790,57 @@ int str_skip_for(
   return -1;
 }
 //----------------------------------------------------------------------------
+void str_to_lower_case(str_t *s)
+{
+  char *p, *ptr = s->ptr;
+  int i = s->size;
+  while (i-- != 0)
+  {
+    char c = *ptr;
+    if (c >= 'A' && c < 'Z')
+      c += 'a'-'A'; // convert ASCII symbol
+    else
+    {
+      p = strchr(_str_loc_au, (unsigned) c); // find in upper case
+      if (p != (char*) NULL) // convert KOI8-R/CP1251/CP866 symbol
+        c = _str_loc_al[(int)(p - _str_loc_au)];
+    }
+    *ptr++ = c;
+  }
+}
+//----------------------------------------------------------------------------
 str_t str_lower_case(const str_t *s)
 {
   str_t r;
-  char *p;
-  if (s->size != 0)
-  {
-    int i = s->size;
-    char c, *src = s->ptr, *dst;
-    r.sector = _str_def_sector;
-    _str_create_size(&r, s->size);
-    dst = r.ptr;
-    while (i-- != 0)
-    {
-      c = *src++;
-      if (c >= 'A' && c < 'Z')
-        c += 'a'-'A'; // convert ASCII symbol
-      else
-      {
-        p = strchr(_str_loc_au, (unsigned) c); // find in upper case
-        if (p != (char*) NULL) // convert KOI8-R/CP1251/CP866 symbol
-          c = _str_loc_al[(int)(p - _str_loc_au)];
-      }
-      *dst++ = c;
-    }
-    *dst = '\0';
-  }
-  else
-    str_init_zero(&r);
+  str_init_str(&r, s);
+  str_to_lower_case(&r);
   return r;
+}
+//----------------------------------------------------------------------------
+void str_to_upper_case(str_t *s)
+{
+  char *p, *ptr = s->ptr;
+  int i = s->size;
+  while (i-- != 0)
+  {
+    char c = *ptr;
+    if (c >= 'a' && c < 'z')
+      c -= 'a' - 'A'; // convert ASCII symbol
+    else
+    {
+      p = strchr(_str_loc_al, (unsigned) c); // find in low case
+      if (p != NULL) // convert KOI8-R/CP1251/CP866 symbol
+        c = _str_loc_au[(int)(p - _str_loc_al)];
+    }
+    *ptr++ = c;
+  }
 }
 //----------------------------------------------------------------------------
 str_t str_upper_case(const str_t *s)
 {
   str_t r;
-  char *p;
-  if (s->size != 0)
-  {
-    int i = s->size;
-    char c, *src = s->ptr, *dst;
-    r.sector = _str_def_sector;
-    _str_create_size(&r, s->size);
-    dst = r.ptr;
-    while (i-- != 0)
-    {
-      c = *src++;
-      if (c >= 'a' && c < 'z')
-        c -= 'a' - 'A'; // convert ASCII symbol
-      else
-      {
-        p = strchr(_str_loc_al, (unsigned) c); // find in low case
-        if (p != NULL) // convert KOI8-R/CP1251/CP866 symbol
-          c = _str_loc_au[(int)(p - _str_loc_al)];
-      }
-      *dst++ = c;
-    }
-    *dst = '\0';
-  }
-  else
-    str_init_zero(&r);
+  str_init_str(&r, s);
+  str_to_upper_case(&r);
   return r;
 }
 //----------------------------------------------------------------------------

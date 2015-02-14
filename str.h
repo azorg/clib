@@ -371,10 +371,6 @@ str_t str_bin(unsigned long value, int digits);
 str_t str_oct(unsigned long value, int digits);
 str_t str_dec(unsigned long value, int digits);
 //----------------------------------------------------------------------------
-// comparison
-STR_BOOL str_is_equal(const str_t *s1, const str_t *s2);
-STR_BOOL str_is_equal_cstr(const str_t *s1, const char *s2);
-//----------------------------------------------------------------------------
 // transformations
 long str_to_long_cstyle(const str_t *s, long def_val, unsigned char base);
 //----------------------------------------------------------------------------
@@ -453,6 +449,19 @@ STR_INLINE char *str_ptr(const str_t *s)
 STR_INLINE const void *str_data(const str_t *s)
 { return (s->size != 0) ? s->ptr : NULL; }
 //----------------------------------------------------------------------------
+// comparison
+STR_BOOL str_is_equal(const str_t *s1, const str_t *s2);
+STR_BOOL str_is_equal_cstr(const str_t *s1, const char *s2);
+//----------------------------------------------------------------------------
+// standart strcmp() wrapper
+STR_INLINE int str_cmp(const str_t *s1, const str_t *s2)
+{ return strcmp(str_c(s1), str_c(s2)); }
+//----------------------------------------------------------------------------
+// ignore case comparisons
+int str_icmp(const str_t *s1, const str_t *s2);
+int str_icmp_c(const str_t *s1, const char *s2);
+int str_icmp_cc(const char *s1, const char *s2);
+//----------------------------------------------------------------------------
 // tools
 str_t str_substr(const str_t *s, int index, int count);
 int str_strpos(const str_t *s, const str_t *substr, int index);
@@ -479,6 +488,8 @@ int str_skip_for(
   int count         // maximum count of search (<0 - unlimited)
 ); // return -1 if skip all
 //----------------------------------------------------------------------------
+void str_to_lower_case(str_t *s);
+void str_to_upper_case(str_t *s);
 str_t str_lower_case(const str_t *s);
 str_t str_upper_case(const str_t *s);
 str_t str_trim_ex(const str_t *s, const char *delim);
