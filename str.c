@@ -8,6 +8,9 @@
 //----------------------------------------------------------------------------
 #include "str.h"
 //----------------------------------------------------------------------------
+// FIXME: old C comiliers have not va_copy macro
+//#define va_copy(dest, src) { dest = src; }
+//----------------------------------------------------------------------------
 char _str_delim[] = STR_TRIM_DELIMITERS; // default trim delimiters
 #ifdef STR_EXCEPTION_STRING
 char _str_exstr[] = STR_EXCEPTION_STRING; // exception string
