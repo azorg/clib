@@ -1,10 +1,10 @@
 #============================================================================
 # Skeleton for GNU Make
-# Version: 0.8.2
+# Version: 0.8.3
 # File: "Makefile.skel"
 # (C) 2005...2015 Alex Zorg <azorg@mail.ru>
 # Licensed by GNU General Public License version 2
-# Last update: 2015.01.30
+# Last update: 2015.08.20
 #============================================================================
 # -*= Makefile example =*-
 #OUT_NAME    := hello
@@ -33,6 +33,8 @@
 #CFLAGS    := $(WARN) $(OPTIM) $(DEFS) $(CFLAGS) -pipe
 #CXXFLAGS  := `wx-config --cxxflags` $(CXXFLAGS) $(CFLAGS)
 #LDFLAGS   := `wx-config --libs` -lm -lrt -lpthread $(LDFLAGS)
+#
+#PREFIX    := /opt
 #----------------------------------------------------------------------------
 #_AS  := @as
 #_CC  := @gcc
@@ -87,6 +89,10 @@ endif
 
 ifndef ASMS_DIR
   ASMS_DIR := disasm
+endif
+#----------------------------------------------------------------------------
+ifndef PREFIX
+	PREFIX := /usr/local
 endif
 #----------------------------------------------------------------------------
 DEPS_DIR_FLG := $(DEPS_DIR)/.dir
@@ -150,17 +156,18 @@ ifndef TAGS_FILE
   TAGS_FILE := TAGS
 endif
 #----------------------------------------------------------------------------
-RM     := @rm
-RMF    := @rm -f
-RMDIR  := @rmdir -p
-RMDIRF := @rm -rf
-MKDIR  := @mkdir -p
-ECHO   := @echo
-TOUCH  := @touch
-CAT    := @cat
-WC     := @wc
-MAKE   := @make
-SHELL  := sh
+RM      := @rm
+RMF     := @rm -f
+RMDIR   := @rmdir -p
+RMDIRF  := @rm -rf
+MKDIR   := @mkdir -p
+ECHO    := @echo
+TOUCH   := @touch
+CAT     := @cat
+WC      := @wc
+MAKE    := @make
+INSTALL := @install -m 0755
+SHELL   := sh
 #----------------------------------------------------------------------------
 BASE_SRCS := $(notdir $(basename $(SRCS)))
 OBJS := $(addprefix $(OBJS_DIR)/, $(addsuffix .o, $(BASE_SRCS)))
@@ -247,6 +254,10 @@ count:
 	$(WC) $(HDRS) $(SRCS)
 
 tags: $(TAGS_FILE)
+
+install: $(OUT)
+	$(ECHO) ">>> install '$(OUT_NAME)' to $(PREFIX)/bin"
+	$(INSTALL) $(OUT) "$(PREFIX)/bin"
 #----------------------------------------------------------------------------
 $(OUT): $(OBJS)
 	$(MKDIR) $(OUT_DIR)
@@ -273,3 +284,4 @@ include $(wildcard $(addsuffix /*.d, $(DEPS_DIR)))
 #----------------------------------------------------------------------------
 
 #*** end of "Makefile.skel" file ***#
+
