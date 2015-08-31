@@ -298,7 +298,7 @@ STR_INLINE void str_init_float(str_t *s, float src)
 { str_init_sprintf(s, "%.8g", src); }
 //----------------------------------------------------------------------------
 STR_INLINE void str_init_double(str_t *s, double src)
-{ str_init_sprintf(s, "%.17g", src); }
+{ str_init_sprintf(s, "%.16g", src); }
 #endif // STR_FLOAT
 //----------------------------------------------------------------------------
 void str_init_bool(str_t *s, STR_BOOL src);

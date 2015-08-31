@@ -189,12 +189,12 @@ int main()
       str_t s1 = str_int(123);
       str_t s2 = str_cstr("456");
       str_t s3 = str_sum("fSsScisdcx", 1., &s1, "+", &s2, '=', 1579, " :-) ",
-                         3.14, ' ', 0xDEADBEEF);
+                         3.1415, ' ', 0xDEADBEEF);
       
       printf("str_sum(...) = '%s'", str_c(&s3));
       str_swap(&s1, &s3);
       print_ok(str_is_equal_cstr(&s1,
-               "1123+456=1579 :-) 3.1400000000000001 DEADBEEF"));
+               "1123+456=1579 :-) 3.1415 DEADBEEF"));
       print_ok(str_is_equal_cstr(&s3, "123"));
       
       str_free(&s1);

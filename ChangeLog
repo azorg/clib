@@ -3,6 +3,9 @@ ChangeLog of simple C/C++ library "clib"
  - removed
  * changed
 
+2015.08.31
+ * change printf format double (%.16g)
+
 2015.02.14
  + add:
      void str_to_lower_case(str_t *s);
