@@ -245,15 +245,15 @@ int main()
 
     if (1)
     { // str_upper_case()
-      str_t s1 = str_cstr("qqqWWWeeeRRR_123_Собака");
+      str_t s1 = str_cstr("qqqWWWeeeRRR_123");
       str_t s2 = str_upper_case(&s1);
       str_t s3 = str_lower_case(&s2);
       
       printf("s2 = '%s' (str_upper_case)", str_c(&s2));
-      print_ok(str_is_equal_cstr(&s2, "QQQWWWEEERRR_123_СОБАКА"));
+      print_ok(str_is_equal_cstr(&s2, "QQQWWWEEERRR_123"));
       
       printf("s3 = '%s' (str_lower_case)", str_c(&s3));
-      print_ok(str_is_equal_cstr(&s3, "qqqwwweeerrr_123_собака"));
+      print_ok(str_is_equal_cstr(&s3, "qqqwwweeerrr_123"));
       
       str_free(&s1);
       str_free(&s2);
@@ -263,7 +263,7 @@ int main()
     if (1)
     { // str_read_from_file(), str_write_to_file
       
-      str_t s1 = str_cstr("Мама мыла раму!\nВот ТАК!\n");
+      str_t s1 = str_cstr("Bla-Bla-Bla!\nDeadBeef!\n");
       str_t s2 = str_zero();
       str_t fname = str_cstr("test_file1.txt");
 

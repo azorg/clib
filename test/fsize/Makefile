@@ -28,9 +28,9 @@ LDFLAGS   := -lm $(LDFLAGS)
 #_CXX := @g++
 #_LD  := @gcc
 
-#_CC  := @g++
-#_CXX := @g++
-#_LD  := @g++
+#_CC  := @clang
+#_CXX := @clang++
+#_LD  := @clang
 
 #_CC  := @gcc-2.95
 #_LD  := @gcc-2.95

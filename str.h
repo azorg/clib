@@ -112,10 +112,18 @@ typedef uint64_t STR_UINT64;
 // max item in str_sum() (or use str_malloc_mem())
 #define STR_SUM_MAX_ITEM 16
 //----------------------------------------------------------------------------
-// choose one of your local 8-bit codepage
-#define STR_KOI8R  // (+)
-#undef  STR_CP1251 //
-#undef  STR_CP866  //
+// choose UTF8 (don't convert to low/upper case non ascii symbols)
+#define STR_UTF8
+
+// choose one of your local 8-bit codepage (DEPRECATED)
+//#define STR_KOI8R
+//#define STR_CP1251
+//#define STR_CP866
+
+#ifdef STR_UTF8
+#define STR_LOCAL_AL ""
+#define STR_LOCAL_AU ""
+#endif // STR_UTF8
 
 #ifdef STR_KOI8R
 #define STR_LOCAL_AL "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
