@@ -7,7 +7,7 @@ simple C library for working with ASCIIZ and byte dynamic strings (str_t)
 simple C library for working with INI-files (ini_t)
 
 ## aini.h
-С++wrapper (aclass::aini) for working with INI-files via std::string
+С++ wrapper (aclass::aini) for working with INI-files via std::string
 
 ## fsize.h/fsize.c
 file size standard determinator
