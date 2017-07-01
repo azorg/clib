@@ -498,8 +498,9 @@ void str_add_cstr(str_t *s, const char *add)
 void str_add_char(str_t *s, char add)
 {
   unsigned int b_cur = 0, b_new;
-  if (s->size != 0) b_cur = (s->size     + s->sector) / s->sector;
-                    b_new = (s->size + 1 + s->sector) / s->sector;
+  if (s->size != 0)
+    b_cur = (s->size + s->sector) / s->sector;
+  b_new = (s->size + 1 + s->sector) / s->sector;
   if (b_cur == b_new)
   {
     s->ptr[s->size++] = add;
