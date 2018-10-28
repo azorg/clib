@@ -330,6 +330,30 @@ int main()
     //break; //!!!
   } // for(..
     
+  if (1)
+  {
+    str_t s1 = str_cstr("12345");
+    str_t s2 = str_cstr("345");
+    int i = str_strpos(&s1, &s2, 1);
+    printf("str_strpos('12345', '345', 1) = %d\n", i);
+    str_free(&s2);
+    str_free(&s1);
+    
+    s1 = str_cstr("12345");
+    s2 = str_cstr("123");
+    i = str_strpos(&s1, &s2, 0);
+    printf("str_strpos('12345', '123', 0) = %d\n", i);
+    str_free(&s2);
+    str_free(&s1);
+    
+    s1 = str_cstr("12345");
+    s2 = str_cstr("124");
+    i = str_strpos(&s1, &s2, 0);
+    printf("str_strpos('12345', '124', 0) = %d\n", i);
+    str_free(&s2);
+    str_free(&s1);
+  }
+
 #ifdef STR_DEBUG
   if (1)
   {

@@ -1,7 +1,8 @@
-ChangeLog of simple C/C++ library "clib"
- + added
- - removed
- * changed
+2018.10.28
+ * update test_str.c
+
+2017.07.01
+ * update str.c
 
 2015.08.31
  * change printf format double (%.16g)
@@ -14,7 +15,6 @@ ChangeLog of simple C/C++ library "clib"
      int str_icmp(const str_t *s1, const str_t *s2);
      int str_icmp_c(const str_t *s1, const char *s2);
      int str_icmp_cc(const char *s1, const str_t *s2);
-
 
 2015.02.13
  + aclass::aini - add default values = 0 to read_* functions
